@@ -28,7 +28,9 @@ export default function VWBeetle() {
 			}
 		});
 	}, [scene]);
-
+	if (isMobile) {
+		return <></>
+	}
 	return <primitive
 		object={scene}
 		scale={1.5}

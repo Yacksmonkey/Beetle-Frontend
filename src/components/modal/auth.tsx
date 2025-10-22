@@ -1,18 +1,23 @@
-import {useState} from 'react'
+import {FormEvent, useState} from 'react'
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog'
 import {Button} from '@/components/ui/button'
 import {Input} from '@/components/ui/input'
 import {Label} from '@/components/ui/label'
 
-export default function AuthModal({authModalOpen, setAuthModalOpen}) {
-	const [isLogin, setIsLogin] = useState(true)
+interface AuthModalProps {
+	authModalOpen: boolean
+	setAuthModalOpen: (open: boolean) => void
+}
+
+export default function AuthModal({authModalOpen, setAuthModalOpen}: AuthModalProps) {
+	const [isLogin, setIsLogin] = useState<boolean>(true)
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
 	const [open, setOpen] = useState(false)
 
-	const handleSubmit = (e) => {
+	const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
 		e.preventDefault()
 
 		if (isLogin) {

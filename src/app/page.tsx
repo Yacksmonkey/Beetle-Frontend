@@ -154,18 +154,6 @@ export default function Home() {
 						</div>
 					</div>
 				</section>
-				<section className="py-24 px-4 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10">
-					<div className="max-w-4xl mx-auto text-center">
-						<h2 className="text-4xl md:text-5xl font-bold mb-6 text-balance">{"Ready to Start Your Journey?"}</h2>
-						<p className="text-xl text-muted-foreground mb-8 text-pretty">
-							{"Join thousands of users who are planning smarter with Bettle"}
-						</p>
-						<Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-							Get Started Free
-							<ArrowRight className="ml-2 h-5 w-5"/>
-						</Button>
-					</div>
-				</section>
 
 				<section id="how-it-works" className="py-24 px-4 bg-muted/30">
 					<div className="max-w-7xl mx-auto">
@@ -205,6 +193,18 @@ export default function Home() {
 								</div>
 							))}
 						</div>
+					</div>
+				</section>
+				<section className="py-24 px-4 ">
+					<div className="max-w-4xl mx-auto text-center">
+						<h2 className="text-4xl md:text-5xl font-bold mb-6 text-balance">{"Ready to Start Your Journey?"}</h2>
+						<p className="text-xl text-muted-foreground mb-8 text-pretty">
+							{"Join thousands of users who are planning smarter with Bettle"}
+						</p>
+						<Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+							Get Started Free
+							<ArrowRight className="ml-2 h-5 w-5"/>
+						</Button>
 					</div>
 				</section>
 

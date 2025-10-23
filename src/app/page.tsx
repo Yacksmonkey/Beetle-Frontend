@@ -1,33 +1,17 @@
-// app/page.tsx
 "use client"
 
-import dynamic from 'next/dynamic'
-// Imports necesarios (al inicio del archivo, antes de dynamic)
 import Navbar from "@/components/core/navbar"
 import {Canvas} from "@react-three/fiber"
-import {Environment, OrbitControls, SpotLight} from "@react-three/drei"
+import {OrbitControls, SpotLight} from "@react-three/drei"
 import {Suspense, useEffect, useState} from "react"
 import VWBeetle from "@/components/core/VWBeetle"
 import {useTheme} from "next-themes"
 import {Button} from "@/components/ui/button"
 import {Card, CardContent} from "@/components/ui/card"
 import {ArrowRight, Map, Sparkles, Users, Zap} from "lucide-react"
-import Footer from "@/components/core/footer"
+import Footer from "@/components/core/footer";
 
-const Home = dynamic(() => Promise.resolve(HomeComponent), {
-	ssr: false,
-	loading: () => (
-		<div className="min-h-screen flex items-center justify-center">
-			<div className="text-center">
-				<div
-					className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"/>
-				<p className="text-muted-foreground">Loading experience...</p>
-			</div>
-		</div>
-	)
-})
-
-function HomeComponent() {
+export default function Home() {
 	const {theme} = useTheme()
 	const [mounted, setMounted] = useState(false)
 
@@ -42,7 +26,7 @@ function HomeComponent() {
 			<Navbar/>
 
 			{/* Canvas Section - 100vh */}
-			<div className="relative h-screen w-full mt-5">
+			<div className="relative h-screen w-full  mt-5">
 				<Canvas camera={{position: [1.5, 3.5, 3], fov: 60}} shadows className="absolute inset-0">
 					<Suspense fallback={null}>
 						<ambientLight intensity={isDark ? 0.1 : 0.2}/>
@@ -54,7 +38,7 @@ function HomeComponent() {
 							intensity={45}
 							distance={15}
 							castShadow
-							color="#00FF00"
+							color={isDark ? "#6495ED" : "#ffffff"}
 							volumetric
 							opacity={0.3}
 						/>
@@ -73,21 +57,34 @@ function HomeComponent() {
 							dampingFactor={0.05}
 							rotateSpeed={0.3}
 						/>
-
-						<Environment preset={isDark ? "night" : "warehouse"}/>
+						<directionalLight
+							position={[5, 5, 5]}
+							intensity={isDark ? 0.8 : 1.2}
+							castShadow
+							color={isDark ? "#6495ED" : "#ffffff"}
+						/>
+						<hemisphereLight
+							groundColor={isDark ? "#0f0f1e" : "#8B4513"}
+							intensity={0.5}
+						/>
 					</Suspense>
 				</Canvas>
 
 				{/* Floating Welcome Section */}
 				<div
-					className="absolute r-2 inset-0 flex items-center justify-center md:justify-start pointer-events-none">
+					className="absolute r-2 inset-0 flex items-center justify-center md:justify-start  pointer-events-none">
 					<div className="text-center space-y-6 px-4 pointer-events-auto">
 						<div className="inline-block">
 							<h1 className="text-6xl md:text-8xl font-bold text-balance">
-								<span className="text-primary">Welcome to</span>
+                <span
+					className="text-primary">
+                  Welcome to
+                </span>
 							</h1>
 							<h1 className="text-6xl md:text-8xl font-bold text-balance mt-2">
-								<span className="text-primary">Bettle</span>
+                <span className="text-primary">
+                  Bettle
+                </span>
 							</h1>
 						</div>
 
@@ -206,8 +203,7 @@ function HomeComponent() {
 						</div>
 					</div>
 				</section>
-
-				<section className="py-24 px-4">
+				<section className="py-24 px-4 ">
 					<div className="max-w-4xl mx-auto text-center">
 						<h2 className="text-4xl md:text-5xl font-bold mb-6 text-balance">{"Ready to Start Your Journey?"}</h2>
 						<p className="text-xl text-muted-foreground mb-8 text-pretty">
@@ -220,10 +216,9 @@ function HomeComponent() {
 					</div>
 				</section>
 
+
 				<Footer/>
 			</div>
 		</div>
 	)
 }
-
-export default Home

@@ -1,3 +1,4 @@
+// components/core/VWBeetle.tsx
 "use client"
 
 import {useGLTF} from '@react-three/drei';
@@ -14,9 +15,7 @@ export default function VWBeetle() {
 		};
 
 		checkMobile();
-
 		window.addEventListener('resize', checkMobile);
-
 		return () => window.removeEventListener('resize', checkMobile);
 	}, []);
 
@@ -28,12 +27,13 @@ export default function VWBeetle() {
 			}
 		});
 	}, [scene]);
-	if (isMobile) {
-		return <></>
-	}
-	return <primitive
-		object={scene}
-		scale={1.5}
-		position={isMobile ? [0, -0.5, 0] : [2, -0.5, -0.3]}
-	/>;
+
+	return (
+		<primitive
+			object={scene}
+			scale={isMobile ? 0 : 1.5}
+			position={isMobile ? [0, -0.5, 0] : [2, -0.5, -0.3]}
+			visible={!isMobile}
+		/>
+	);
 }

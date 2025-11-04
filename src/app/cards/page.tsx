@@ -1,7 +1,7 @@
 "use client"
 
 import {useState} from "react"
-import {motion, useAnimation, useMotionValue, useTransform} from "framer-motion"
+import {motion, PanInfo, useAnimation, useMotionValue, useTransform} from "framer-motion"
 import Navbar from "@/components/core/navbar";
 
 const cards = [
@@ -127,7 +127,7 @@ function Card({
 	const scale = 1 - (totalCards - 1 - index) * 0.05
 	const yOffset = (totalCards - 1 - index) * 10
 
-	const handleDragEnd = async (_: any, info: any) => {
+	const handleDragEnd = async (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
 		if (Math.abs(info.offset.x) > 80) {
 			const direction = info.offset.x > 0 ? 1 : -1
 			await controls.start({

@@ -70,14 +70,14 @@ export default function Home() {
 					</Suspense>
 				</Canvas>
 
-				{/* Floating Welcome Section */}
 				<div
 					className="absolute r-2 inset-0 flex items-center justify-center md:justify-start  pointer-events-none">
 					<div className="text-center space-y-6 px-4 pointer-events-auto">
 						<div className="inline-block">
 							<h1 className="text-6xl md:text-8xl font-bold text-balance">
                 <span
-					className="text-primary">
+					className="text-primary"
+				>
                   Welcome to
                 </span>
 							</h1>

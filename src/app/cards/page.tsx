@@ -12,8 +12,6 @@ const cards = [
 		value: "accion",
 		relation: "Peliculas",
 		img: null,
-		color: "text-orange-600",
-		bg: "from-orange-50"
 	},
 	{
 		id: 2,
@@ -22,8 +20,6 @@ const cards = [
 		value: "drama",
 		relation: "Peliculas",
 		img: null,
-		color: "text-purple-600",
-		bg: "from-purple-50"
 	},
 	{
 		id: 3,
@@ -32,8 +28,6 @@ const cards = [
 		value: "comedia",
 		relation: "Peliculas",
 		img: null,
-		color: "text-yellow-600",
-		bg: "from-yellow-50"
 	},
 	{
 		id: 4,
@@ -42,8 +36,6 @@ const cards = [
 		value: "scifi",
 		relation: "Peliculas",
 		img: null,
-		color: "text-blue-600",
-		bg: "from-blue-50"
 	},
 	{
 		id: 5,
@@ -52,8 +44,6 @@ const cards = [
 		value: "terror",
 		relation: "Peliculas",
 		img: null,
-		color: "text-gray-900",
-		bg: "from-gray-50"
 	},
 	{
 		id: 6,
@@ -62,8 +52,6 @@ const cards = [
 		value: "animacion",
 		relation: "Peliculas",
 		img: null,
-		color: "text-pink-600",
-		bg: "from-pink-50"
 	},
 ]
 
@@ -77,7 +65,7 @@ export default function Page() {
 	return (
 		<main
 			className="min-h-screen bg-gradient-to-br from-secondary via-card to-background flex items-center justify-center p-4 overflow-hidden">
-			<Navbar></Navbar>
+			<Navbar/>
 			<div className="relative w-80 h-[500px]">
 				{currentCards.map((card, index) => (
 					<Card
@@ -112,8 +100,7 @@ function Card({
 		value: string;
 		relation: string;
 		img: null;
-		color: string;
-		bg: string
+
 	}
 	index: number
 	totalCards: number
@@ -163,9 +150,9 @@ function Card({
 		>
 			<div className="w-full h-full  rounded-2xl shadow-2xl border-2 ">
 				<div
-					className={`w-full h-full rounded-2xl bg-gradient-to-br ${card.bg} to-white p-8 flex flex-col items-center justify-center`}>
+					className={`w-full h-full rounded-2xl bg-card p-8 flex flex-col items-center justify-center`}>
 					<div className="text-8xl mb-4">{card.emoji}</div>
-					<div className={`${card.color} font-bold text-3xl text-center`}>{card.text}</div>
+					<div className={`font-bold text-3xl text-center`}>{card.text}</div>
 					<div className="text-gray-400 text-sm mt-2">{card.relation}</div>
 				</div>
 			</div>

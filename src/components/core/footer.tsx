@@ -50,13 +50,12 @@ const logo = {
 	title: "Bettle.com",
 };
 
-const description = "A collection of components for your startup business or side project.";
-const copyright = "© 2024 Shadcnblocks.com. All rights reserved.";
 
 export default function Footer() {
 	return (
-		<section className="py-24 px-4 bg-background/80 backdrop-blur-md border-t border-border/80">
-			<div className="container">
+		<section
+			className="flex justify-center w-full  py-24 bg-background/80 backdrop-blur-md border-t border-border/80">
+			<div className="container w-full  ">
 				<div className="flex w-full flex-col justify-between gap-10 lg:flex-row lg:items-start lg:text-left">
 					<div className="flex w-full flex-col justify-between gap-6 lg:items-start">
 						{/* Logo */}
@@ -72,7 +71,7 @@ export default function Footer() {
 							<h2 className="text-xl font-semibold text-primary">{logo.title}</h2>
 						</div>
 						<p className="text-muted-foreground max-w-[70%] text-sm">
-							{description}
+							A collection of components for your startup business or side project.
 						</p>
 						<ul className="text-muted-foreground flex items-center space-x-6">
 							{socialLinks.map((social, idx) => (
@@ -104,7 +103,7 @@ export default function Footer() {
 				</div>
 				<div
 					className="text-muted-foreground mt-8 flex flex-col justify-between gap-4 border-t py-8 text-xs font-medium md:flex-row md:items-center md:text-left">
-					<p className="order-2 lg:order-1">{copyright}</p>
+					<p className="order-2 lg:order-1">© 2024 Shadcnblocks.com. All rights reserved.</p>
 					<ul className="order-1 flex flex-col gap-2 md:order-2 md:flex-row">
 						{legalLinks.map((link, idx) => (
 							<li key={idx} className="hover:text-primary">

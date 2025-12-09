@@ -1,3 +1,4 @@
+"use client"
 import {useState} from 'react'
 import {Menu, User, X} from 'lucide-react'
 import {Sheet, SheetContent, SheetTrigger,} from '@/components/ui/sheet'

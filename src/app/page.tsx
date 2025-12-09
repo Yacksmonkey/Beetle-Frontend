@@ -1,6 +1,5 @@
 "use client"
 
-import Navbar from "@/components/core/navbar"
 import {Canvas} from "@react-three/fiber"
 import {OrbitControls, SpotLight} from "@react-three/drei"
 import {Suspense, useEffect, useState} from "react"
@@ -9,7 +8,6 @@ import {useTheme} from "next-themes"
 import {Button} from "@/components/ui/button"
 import {Card, CardContent} from "@/components/ui/card"
 import {ArrowRight, Map, Sparkles, Users, Zap} from "lucide-react"
-import Footer from "@/components/core/footer";
 
 export default function Home() {
 	const {theme} = useTheme()
@@ -23,9 +21,7 @@ export default function Home() {
 
 	return (
 		<div className="min-h-screen">
-			<Navbar/>
 
-			{/* Canvas Section - 100vh */}
 			<div className="relative h-screen w-full  mt-5">
 				<Canvas camera={{position: [1.5, 3.5, 3], fov: 60}} shadows className="absolute inset-0">
 					<Suspense fallback={null}>
@@ -114,7 +110,6 @@ export default function Home() {
 				</div>
 			</div>
 
-			{/* Content Sections Below Canvas */}
 			<div className="bg-background">
 				{/* Features Section */}
 				<section id="features" className="py-24 px-4">
@@ -217,7 +212,6 @@ export default function Home() {
 				</section>
 
 
-				<Footer/>
 			</div>
 		</div>
 	)

@@ -1,9 +1,11 @@
 "use client"
 
-import {Eye, MapPin, User} from "lucide-react"
-import {Card} from "@/components/ui/card"
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
+import { useEffect, useState } from "react"
 import Image from "next/image"
+import { Eye, MapPin, User } from "lucide-react"
+import { Card } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getMe } from "@/services/auth"
 
 export default function ProfilePage() {
 	return (
@@ -18,8 +20,15 @@ export default function ProfilePage() {
 								   className="object-cover" priority/>
 						</div>
 
+    useEffect(() => {
+        const loadMe = async () => {
+            const data = await getMe()
+            setMe(data)
+            setLoading(false)
+        }
 
-					</div>
+        loadMe()
+    }, [])
 
 					<div className="lg:w-2/3 space-y-6">
 						<div className="space-y-4">
@@ -34,91 +43,61 @@ export default function ProfilePage() {
 							</div>
 						</div>
 
-						{/* Tabs Section */}
-						<Tabs defaultValue="about" className="w-full">
-							<TabsList className="grid w-full grid-cols-2">
-								<TabsTrigger value="timeline" className="gap-2">
-									<Eye className="w-4 h-4"/>
-									Timeline
-								</TabsTrigger>
-								<TabsTrigger value="about" className="gap-2">
-									<User className="w-4 h-4"/>
-									About
-								</TabsTrigger>
-							</TabsList>
+                    {/* LEFT */}
+                    <div className="lg:w-1/3 space-y-8">
+                        <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-muted">
+                            <img
+                                src={me.picture || "/avatar-placeholder.png"}
+                                alt="Profile picture"
+                                className="w-full h-full object-cover rounded-lg"
+                            />
 
-							<TabsContent value="timeline" className="mt-6">
-								<Card className="p-6">
-									<p className="text-muted-foreground">Timeline content goes here</p>
-								</Card>
-							</TabsContent>
 
-							<TabsContent value="about" className="mt-6">
-								<div className="space-y-6">
-									{/* Contact Information */}
-									<Card className="p-6">
-										<h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-											Contact Information
-										</h3>
-										<div className="space-y-4">
-											<div className="flex flex-col sm:flex-row sm:items-center gap-2">
-												<span
-													className="text-sm font-medium text-foreground min-w-24">Phone:</span>
-												<a href="tel:+11234567890"
-												   className="text-sm text-primary hover:underline">
-													+1 123 456 7890
-												</a>
-											</div>
-											<div className="flex flex-col sm:flex-row sm:items-center gap-2">
-												<span
-													className="text-sm font-medium text-foreground min-w-24">Address:</span>
-												<p className="text-sm text-muted-foreground">
-													525 E 68th Street, New York, NY 10651-78 156-187-60
-												</p>
-											</div>
-											<div className="flex flex-col sm:flex-row sm:items-center gap-2">
-												<span
-													className="text-sm font-medium text-foreground min-w-24">E-mail:</span>
-												<a href="mailto:hello@jeremyrose.com"
-												   className="text-sm text-primary hover:underline">
-													hello@jeremyrose.com
-												</a>
-											</div>
-											<div className="flex flex-col sm:flex-row sm:items-center gap-2">
-												<span
-													className="text-sm font-medium text-foreground min-w-24">Site:</span>
-												<a href="https://www.jeremyrose.com"
-												   className="text-sm text-primary hover:underline">
-													www.jeremyrose.com
-												</a>
-											</div>
-										</div>
-									</Card>
+                        </div>
+                    </div>
 
-									{/* Basic Information */}
-									<Card className="p-6">
-										<h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-											Basic Information
-										</h3>
-										<div className="space-y-4">
-											<div className="flex flex-col sm:flex-row sm:items-center gap-2">
-												<span
-													className="text-sm font-medium text-foreground min-w-24">Birthday:</span>
-												<p className="text-sm text-muted-foreground">June 5, 1992</p>
-											</div>
-											<div className="flex flex-col sm:flex-row sm:items-center gap-2">
-												<span
-													className="text-sm font-medium text-foreground min-w-24">Gender:</span>
-												<p className="text-sm text-muted-foreground">Male</p>
-											</div>
-										</div>
-									</Card>
-								</div>
-							</TabsContent>
-						</Tabs>
-					</div>
-				</div>
-			</div>
-		</div>
-	)
+                    {/* RIGHT */}
+                    <div className="lg:w-2/3 space-y-6">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-2">
+                                <h1 className="text-4xl font-bold">{me.name}</h1>
+                                {me.publicProfile && <Eye className="w-5 h-5 text-muted-foreground" />}
+                            </div>
+                            <p className="text-muted-foreground">@{me.username}</p>
+                            <p className="text-muted-foreground">{me.email}</p>
+                        </div>
+
+                        <Tabs defaultValue="about" className="w-full">
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="timeline">
+                                    <Eye className="w-4 h-4 mr-2" />
+                                    Timeline
+                                </TabsTrigger>
+                                <TabsTrigger value="about">
+                                    <User className="w-4 h-4 mr-2" />
+                                    About
+                                </TabsTrigger>
+                            </TabsList>
+
+                            <TabsContent value="timeline" className="mt-6">
+                                <Card className="p-6">
+                                    <p className="text-muted-foreground">Timeline próximamente</p>
+                                </Card>
+                            </TabsContent>
+
+                            <TabsContent value="about" className="mt-6">
+                                <Card className="p-6">
+                                    <h3 className="text-sm font-semibold text-muted-foreground mb-4">
+                                        Basic info
+                                    </h3>
+                                    <p>Public profile: {me.publicProfile ? "Yes" : "No"}</p>
+                                </Card>
+                            </TabsContent>
+
+                        </Tabs>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }

@@ -8,8 +8,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getMe } from "@/services/auth"
 
 export default function ProfilePage() {
-    const [me, setMe] = useState<any>(null)
-    const [loading, setLoading] = useState(true)
+	return (
+		<div className="min-h-screen bg-background  px-4 ">
+			<div className="max-w-6xl mx-auto mt-28">
+				<div className="flex flex-col lg:flex-row gap-8">
+					<div className="lg:w-1/3 space-y-8">
+						{/* Profile Image */}
+						<div className="relative w-full aspect-square rounded-lg overflow-hidden bg-muted">
+							<Image src="https://indiehoy.com/wp-content/uploads/2020/07/rick-morty.jpg"
+								   alt="Jeremy Rose profile picture" fill
+								   className="object-cover" priority/>
+						</div>
 
     useEffect(() => {
         const loadMe = async () => {
@@ -21,13 +30,18 @@ export default function ProfilePage() {
         loadMe()
     }, [])
 
-    if (loading) return <p className="p-8">Loading profile...</p>
-    if (!me) return <p className="p-8">Not authenticated</p>
-
-    return (
-        <div className="min-h-screen bg-background py-8 px-4 mt-12">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex flex-col lg:flex-row gap-8">
+					<div className="lg:w-2/3 space-y-6">
+						<div className="space-y-4">
+							<div className="flex items-start justify-between">
+								<div>
+									<div className="flex items-center gap-2">
+										<h1 className="text-4xl font-bold text-foreground">Jeremy Rose</h1>
+										<MapPin className="w-5 h-5 text-muted-foreground"/>
+										<span className="text-muted-foreground">New York, NY</span>
+									</div>
+								</div>
+							</div>
+						</div>
 
                     {/* LEFT */}
                     <div className="lg:w-1/3 space-y-8">

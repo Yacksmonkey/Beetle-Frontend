@@ -7,8 +7,8 @@ import Image from "next/image"
 
 export default function ProfilePage() {
 	return (
-		<div className="min-h-screen bg-background py-8 px-4 mt-12">
-			<div className="max-w-6xl mx-auto">
+		<div className="min-h-screen bg-background  px-4 ">
+			<div className="max-w-6xl mx-auto mt-28">
 				<div className="flex flex-col lg:flex-row gap-8">
 					<div className="lg:w-1/3 space-y-8">
 						{/* Profile Image */}
@@ -21,9 +21,7 @@ export default function ProfilePage() {
 
 					</div>
 
-					{/* Right Column - Main Profile Info */}
 					<div className="lg:w-2/3 space-y-6">
-						{/* Profile Header */}
 						<div className="space-y-4">
 							<div className="flex items-start justify-between">
 								<div>
@@ -33,7 +31,6 @@ export default function ProfilePage() {
 										<span className="text-muted-foreground">New York, NY</span>
 									</div>
 								</div>
-
 							</div>
 						</div>
 

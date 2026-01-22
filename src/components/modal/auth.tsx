@@ -45,6 +45,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
         resetFields()
         setNotice(null)
         setNoticeType(null)
+
     }
 
     const setError = (msg: string) => {

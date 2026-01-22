@@ -1,9 +1,9 @@
 "use client"
 
-import {Canvas} from "@react-three/fiber"
+import { Canvas } from "@react-three/fiber"
 import {OrbitControls, SpotLight} from "@react-three/drei"
 import {Suspense, useEffect, useState} from "react"
-import VWBeetle from "@/components/core/VWBeetle"
+import VWBeetle from "../components/core/VWBeetle"
 import {useTheme} from "next-themes"
 import {Button} from "@/components/ui/button"
 import {Card, CardContent} from "@/components/ui/card"
@@ -21,9 +21,8 @@ export default function Home() {
 
 	return (
 		<div className="min-h-screen">
-
 			<div className="relative h-screen w-full  mt-5">
-				<Canvas camera={{position: [1.5, 3.5, 3], fov: 60}} shadows className="absolute inset-0">
+                {/* <Canvas camera={{position: [1.5, 3.5, 3], fov: 60}} shadows className="absolute inset-0">
 					<Suspense fallback={null}>
 						<ambientLight intensity={isDark ? 0.1 : 0.2}/>
 
@@ -64,7 +63,7 @@ export default function Home() {
 							intensity={0.5}
 						/>
 					</Suspense>
-				</Canvas>
+				</Canvas>*/}
 
 				<div
 					className="absolute r-2 inset-0 flex items-center justify-center md:justify-start  pointer-events-none">

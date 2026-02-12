@@ -30,6 +30,11 @@ export default function ProfilePage() {
     const [bio, setBio] = useState("")
     const [publicProfile, setPublicProfile] = useState(false)
 
+    // upload states
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const [isUploading, setIsUploading] = useState(false)
+    const [uploadMsg, setUploadMsg] = useState<string | null>(null)
+
     useEffect(() => {
         loadMe()
     }, [])
@@ -76,6 +81,42 @@ export default function ProfilePage() {
 
         setEditOpen(false)
         await loadMe()
+    }
+
+    const uploadProfilePicture = async () => {
+        if (!selectedFile) {
+            setUploadMsg("Please select an image first.")
+            return
+        }
+
+        setIsUploading(true)
+        setUploadMsg(null)
+
+        try {
+            const formData = new FormData()
+            formData.append("file", selectedFile)
+
+            const res = await fetch("http://localhost:8080/api/uploads/profile-picture", {
+                method: "POST",
+                credentials: "include",
+                body: formData,
+            })
+
+            if (!res.ok) {
+                const text = await res.text().catch(() => "")
+                setUploadMsg(text || "Upload failed.")
+                return
+            }
+
+            const data = await res.json()
+            setPicture(data.url)
+            setUploadMsg("Profile picture uploaded successfully.")
+            setSelectedFile(null)
+        } catch {
+            setUploadMsg("Network error. Is the backend running?")
+        } finally {
+            setIsUploading(false)
+        }
     }
 
     if (loading) return <p className="p-8">Loading profile...</p>
@@ -158,6 +199,31 @@ export default function ProfilePage() {
                             <Input value={username} onChange={(e) => setUsername(e.target.value)} />
                         </div>
 
+                        {/* UPLOAD PICTURE */}
+                        <div className="space-y-2">
+                            <Label>Upload picture</Label>
+                            <Input
+                                type="file"
+                                accept="image/png,image/jpeg,image/webp"
+                                disabled={isUploading}
+                                onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
+                            />
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={uploadProfilePicture}
+                                    disabled={isUploading || !selectedFile}
+                                >
+                                    {isUploading ? "Uploading..." : "Upload"}
+                                </Button>
+
+                                {uploadMsg && (
+                                    <p className="text-sm text-muted-foreground">{uploadMsg}</p>
+                                )}
+                            </div>
+                        </div>
+
                         <div>
                             <Label>Picture URL</Label>
                             <Input value={picture} onChange={(e) => setPicture(e.target.value)} />
@@ -172,11 +238,11 @@ export default function ProfilePage() {
                             <Label>Address</Label>
                             <Input value={address} onChange={(e) => setAddress(e.target.value)} />
                         </div>
+
                         <div className="space-y-2">
                             <Label htmlFor="bio">Bio</Label>
                             <Input value={bio} onChange={(e) => setBio(e.target.value)} />
                         </div>
-
 
                         <div className="flex items-center gap-2">
                             <input

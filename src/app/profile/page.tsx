@@ -16,12 +16,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getMe } from "@/services/auth"
 
+type FriendItem = {
+    friendUserId: number
+    username: string
+    picture: string | null
+}
+
 export default function ProfilePage() {
     const [me, setMe] = useState<any>(null)
     const [loading, setLoading] = useState(true)
     const [editOpen, setEditOpen] = useState(false)
 
-    // editable fields
     const [name, setName] = useState("")
     const [username, setUsername] = useState("")
     const [picture, setPicture] = useState("")
@@ -30,13 +35,18 @@ export default function ProfilePage() {
     const [bio, setBio] = useState("")
     const [publicProfile, setPublicProfile] = useState(false)
 
-    // upload states
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [isUploading, setIsUploading] = useState(false)
     const [uploadMsg, setUploadMsg] = useState<string | null>(null)
 
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080"
+
+    const [friends, setFriends] = useState<FriendItem[]>([])
+    const [friendsLoading, setFriendsLoading] = useState(true)
+
     useEffect(() => {
         loadMe()
+        loadFriends()
     }, [])
 
     const loadMe = async () => {
@@ -54,6 +64,29 @@ export default function ProfilePage() {
         }
 
         setLoading(false)
+    }
+
+    const loadFriends = async () => {
+        try {
+            setFriendsLoading(true)
+
+            const res = await fetch(`${API_BASE}/api/friends`, {
+                method: "GET",
+                credentials: "include",
+            })
+
+            if (!res.ok) {
+                throw new Error("Failed to load friends")
+            }
+
+            const data = await res.json()
+            setFriends(data)
+        } catch (e) {
+            console.error(e)
+            setFriends([])
+        } finally {
+            setFriendsLoading(false)
+        }
     }
 
     const saveProfile = async () => {
@@ -126,12 +159,10 @@ export default function ProfilePage() {
         <div className="min-h-screen bg-background py-8 px-4 mt-12">
             <div className="max-w-6xl mx-auto">
                 <div className="flex flex-col lg:flex-row gap-8">
-
-                    {/* LEFT */}
                     <div className="lg:w-1/3 space-y-6">
                         <div className="relative w-full h-[320px] rounded-lg overflow-hidden bg-muted">
                             <img
-                                src={me.picture || "/avatar-placeholder.png"}
+                                src={me.picture || "/bettle insect.jpg"}
                                 alt="Profile"
                                 className="w-full h-full object-cover"
                             />
@@ -142,7 +173,6 @@ export default function ProfilePage() {
                         </Button>
                     </div>
 
-                    {/* RIGHT */}
                     <div className="lg:w-2/3 space-y-6">
                         <div>
                             <div className="flex items-center gap-2">
@@ -173,6 +203,44 @@ export default function ProfilePage() {
                                     <p><b>Address:</b> {me.address || "-"}</p>
                                     <p><b>Bio:</b> {me.bio || "-"}</p>
                                     <p><b>Public profile:</b> {me.publicProfile ? "Yes" : "No"}</p>
+
+                                    <div className="pt-4">
+                                        <p><b>Friends:</b></p>
+
+                                        {friendsLoading && (
+                                            <p className="text-sm text-muted-foreground">Loading friends...</p>
+                                        )}
+
+                                        {!friendsLoading && friends.length === 0 && (
+                                            <p className="text-sm text-muted-foreground">No friends yet.</p>
+                                        )}
+
+                                        {!friendsLoading && friends.length > 0 && (
+                                            <div className="space-y-3 pt-2">
+                                                {friends.map((friend) => (
+                                                    <div
+                                                        key={friend.friendUserId}
+                                                        className="flex items-center gap-3"
+                                                    >
+                                                        <img
+                                                            src={friend.picture || "/bettle insect.jpg"}
+                                                            alt={friend.username}
+                                                            className="w-10 h-10 rounded-full object-cover border"
+                                                        />
+
+                                                        <div className="flex flex-col">
+                                                            <p className="text-sm font-medium">
+                                                                @{friend.username}
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                Friend
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </Card>
                             </TabsContent>
                         </Tabs>
@@ -180,7 +248,6 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            {/* EDIT MODAL */}
             <Dialog open={editOpen} onOpenChange={setEditOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -199,7 +266,6 @@ export default function ProfilePage() {
                             <Input value={username} onChange={(e) => setUsername(e.target.value)} />
                         </div>
 
-                        {/* UPLOAD PICTURE */}
                         <div className="space-y-2">
                             <Label>Upload picture</Label>
                             <Input

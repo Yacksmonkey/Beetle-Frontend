@@ -37,342 +37,238 @@ interface CardItem {
 }
 
 const initialCards: CardItem[] = [
-	{
-		"text": "Acción", "emoji": "💥", "value": "accion",
-		"relation": "Peliculas", "img": "", "id": "1"
-	},
-	{
-		"text": "Drama", "emoji": "🎭", "value": "drama",
-		"relation": "Peliculas", "img": "", "id": "2"
-	},
-	{
-		"text": "Comedia", "emoji": "😂", "value": "comedia",
-		"relation": "Peliculas", "img": "", "id": "3"
-	},
-	{
-		"text": "Ciencia Ficción", "emoji": "🚀",
-		"value": "scifi", "relation": "Peliculas", "img": "", "id": "4"
-	},
-	{
-		"text": "Terror", "emoji": "👻", "value": "terror",
-		"relation": "Peliculas", "img": "", "id": "5"
-	},
-	{
-		"text": "Animación", "emoji": "🎨", "value": "animacion",
-		"relation": "Peliculas", "img": "", "id": "6"
-	},
-	{
-		"text": "Ficción", "emoji": "📖", "value": "ficcion",
-		"relation": "Libros", "img": "", "id": "7"
-	},
-	{
-		"text": "Ciencia Ficción", "emoji": "🛸",
-		"value": "scifi", "relation": "Libros", "img": "", "id": "8"
-	},
-	{
-		"text": "Fantasía", "emoji": "🧙‍♂️", "value": "fantasia",
-		"relation": "Libros", "img": "", "id": "9"
-	},
-	{
-		"text": "Misterio", "emoji": "🔍", "value": "misterio",
-		"relation": "Libros", "img": "", "id": "10"
-	},
-	{
-		"text": "Romance", "emoji": "💕", "value": "romance",
-		"relation": "Libros", "img": "", "id": "11"
-	},
-	{
-		"text": "No Ficción", "emoji": "📊", "value": "noficcion",
-		"relation": "Libros", "img": "", "id": "12"
-	},
-	{
-		"text": "Drama", "emoji": "🎭", "value": "drama",
-		"relation": "Series", "img": "", "id": "13"
-	},
-	{
-		"text": "Comedia", "emoji": "😄", "value": "comedia",
-		"relation": "Series", "img": "", "id": "14"
-	},
-	{
-		"text": "Acción", "emoji": "⚔️", "value": "accion",
-		"relation": "Series", "img": "", "id": "15"
-	},
-	{
-		"text": "Ciencia Ficción", "emoji": "👽",
-		"value": "scifi", "relation": "Series", "img": "", "id": "16"
-	},
-	{
-		"text": "Crimen/Thriller", "emoji": "🕵️",
-		"value": "crimen", "relation": "Series", "img": "", "id": "17"
-	},
-	{
-		"text": "Documentales", "emoji": "🎥",
-		"value": "documental", "relation": "Series", "img": "", "id": "18"
-	},
-	{
-		"text": "Película Corta (< 90 min)", "emoji": "⏰", "value": "accion_corta",
-		"relation": "accion", "img": "", "id": "19"
-	},
-	{
-		"text": "Duración Media (90-120 min)", "emoji": "🕐", "value": "accion_media",
-		"relation": "accion", "img": "", "id": "20"
-	},
-	{
-		"text": "Película Larga (> 120 min)", "emoji": "⏳", "value": "accion_larga",
-		"relation": "accion", "img": "", "id": "21"
-	},
-	{
-		"text": "Con Tom Cruise", "emoji": "🎬", "value": "tom_cruise_accion_corta",
-		"relation": "accion_corta", "img": "", "id": "22"
-	},
-	{
-		"text": "Con Jason Statham", "emoji": "💪", "value": "jason_statham_accion_corta",
-		"relation": "accion_corta", "img": "", "id": "23"
-	},
-	{
-		"text": "Con Keanu Reeves", "emoji": "🕴️", "value": "keanu_reeves_accion_corta",
-		"relation": "accion_corta", "img": "", "id": "24"
-	},
-	{
-		"text": "Con Will Smith", "emoji": "😎", "value": "will_smith_accion_media",
-		"relation": "accion_media", "img": "", "id": "25"
-	},
-	{
-		"text": "Con Dwayne Johnson", "emoji": "🗿", "value": "dwayne_johnson_accion_media",
-		"relation": "accion_media", "img": "", "id": "26"
-	},
-	{
-		"text": "Con Chris Evans", "emoji": "🛡️", "value": "chris_evans_accion_media",
-		"relation": "accion_media", "img": "", "id": "27"
-	},
-	{
-		"text": "Dirigida por Christopher Nolan", "emoji": "🧠", "value": "christopher_nolan_accion_larga",
-		"relation": "accion_larga", "img": "", "id": "28"
-	},
-	{
-		"text": "Dirigida por Zack Snyder", "emoji": "🦸", "value": "zack_snyder_accion_larga",
-		"relation": "accion_larga", "img": "", "id": "29"
-	},
-	{
-		"text": "Dirigida por Russo Brothers", "emoji": "👥", "value": "russo_brothers_accion_larga",
-		"relation": "accion_larga", "img": "", "id": "30"
-	},
-	{
-		"text": "Películas Clásicas (antes 1990)", "emoji": "🎞️",
-		"value": "drama_clasico", "relation": "drama", "img": "", "id": "31"
-	},
-	{
-		"text": "Películas Modernas (1990-2010)", "emoji": "📼",
-		"value": "drama_moderno", "relation": "drama", "img": "", "id": "32"
-	},
-	{
-		"text": "Películas Actuales (2010+)", "emoji": "🆕", "value": "drama_actual",
-		"relation": "drama", "img": "", "id": "33"
-	},
-	{
-		"text": "Con Marlon Brando", "emoji": "👑", "value": "marlon_brando_drama_clasico",
-		"relation": "drama_clasico", "img": "", "id": "34"
-	},
-	{
-		"text": "Con Al Pacino", "emoji": "🕴️", "value": "al_pacino_drama_clasico",
-		"relation": "drama_clasico", "img": "", "id": "35"
-	},
-	{
-		"text": "Con Robert De Niro", "emoji": "🎭", "value": "robert_deniro_drama_clasico",
-		"relation": "drama_clasico", "img": "", "id": "36"
-	},
-	{
-		"text": "Con Tom Hanks", "emoji": "🏃‍♂️", "value": "tom_hanks_drama_moderno",
-		"relation": "drama_moderno", "img": "", "id": "37"
-	},
-	{
-		"text": "Con Leonardo DiCaprio", "emoji": "🌊", "value": "leonardo_dicaprio_drama_moderno",
-		"relation": "drama_moderno", "img": "", "id": "38"
-	},
-	{
-		"text": "Con Russell Crowe", "emoji": "🏛️", "value": "russell_crowe_drama_moderno",
-		"relation": "drama_moderno", "img": "", "id": "39"
-	},
-	{
-		"text": "Con Joaquin Phoenix", "emoji": "🃏", "value": "joaquin_phoenix_drama_actual",
-		"relation": "drama_actual", "img": "", "id": "40"
-	},
-	{
-		"text": "Con Ryan Gosling", "emoji": "🌙", "value": "ryan_gosling_drama_actual",
-		"relation": "drama_actual", "img": "", "id": "41"
-	},
-	{
-		"text": "Con Oscar Isaac", "emoji": "🎵", "value": "oscar_isaac_drama_actual",
-		"relation": "drama_actual", "img": "", "id": "42"
-	},
-	{
-		"text": "Comedia Romántica", "emoji": "💕", "value": "comedia_romantica",
-		"relation": "comedia", "img": "", "id": "43"
-	},
-	{
-		"text": "Comedia de Acción", "emoji": "💥", "value": "comedia_accion",
-		"relation": "comedia", "img": "", "id": "44"
-	},
-	{
-		"text": "Comedia Familiar", "emoji": "👨‍👩‍👧‍👦",
-		"value": "comedia_familiar", "relation": "comedia", "img": "", "id": "45"
-	},
-	{
-		"text": "Con Ryan Reynolds", "emoji": "😏", "value": "ryan_reynolds_comedia_romantica",
-		"relation": "comedia_romantica", "img": "", "id": "46"
-	},
-	{
-		"text": "Con Jennifer Aniston", "emoji": "💛", "value": "jennifer_aniston_comedia_romantica",
-		"relation": "comedia_romantica", "img": "", "id": "47"
-	},
-	{
-		"text": "Con Hugh Grant", "emoji": "🇬🇧", "value": "hugh_grant_comedia_romantica",
-		"relation": "comedia_romantica", "img": "", "id": "48"
-	},
-	{
-		"text": "Isaac Asimov", "emoji": "🤖", "value": "asimov",
-		"relation": "scifi", "img": "", "id": "49"
-	},
-	{
-		"text": "Philip K. Dick", "emoji": "🧠", "value": "dick",
-		"relation": "scifi", "img": "", "id": "50"
-	},
-	{
-		"text": "Ursula K. Le Guin", "emoji": "🌌", "value": "leguin",
-		"relation": "scifi", "img": "", "id": "51"
-	},
-	{
-		"text": "Ray Bradbury", "emoji": "🔥", "value": "bradbury",
-		"relation": "scifi", "img": "", "id": "52"
-	},
-	{
-		"text": "Robots y Inteligencia Artificial", "emoji": "🤖", "value": "asimov_robots",
-		"relation": "asimov", "img": "", "id": "53"
-	},
-	{
-		"text": "Imperio Galáctico", "emoji": "🌟", "value": "asimov_imperio",
-		"relation": "asimov", "img": "", "id": "54"
-	},
-	{
-		"text": "Fundación", "emoji": "🏛️", "value": "asimov_fundacion",
-		"relation": "asimov", "img": "", "id": "55"
-	},
-	{
-		"text": "Realidad Virtual", "emoji": "🕶️", "value": "dick_realidad_virtual",
-		"relation": "dick", "img": "", "id": "56"
-	},
-	{
-		"text": "Distopías Futuristas", "emoji": "🏙️", "value": "dick_distopias",
-		"relation": "dick", "img": "", "id": "57"
-	},
-	{
-		"text": "Identidad y Memoria", "emoji": "🧩", "value": "dick_identidad",
-		"relation": "dick", "img": "", "id": "58"
-	},
-	{
-		"text": "Novela Corta (< 300 páginas)", "emoji": "📖",
-		"value": "fantasia_corta", "relation": "fantasia", "img": "", "id": "59"
-	},
-	{
-		"text": "Novela Media (300-500 páginas)", "emoji": "📚",
-		"value": "fantasia_media", "relation": "fantasia", "img": "", "id": "60"
-	},
-	{
-		"text": "Saga Épica (500+ páginas)", "emoji": "📜", "value": "fantasia_epica",
-		"relation": "fantasia", "img": "", "id": "61"
-	},
-	{
-		"text": "J.R.R. Tolkien", "emoji": "🧙‍♂️", "value": "tolkien_fantasia_epica",
-		"relation": "fantasia_epica", "img": "", "id": "62"
-	},
-	{
-		"text": "George R.R. Martin", "emoji": "🗡️", "value": "martin_fantasia_epica",
-		"relation": "fantasia_epica", "img": "", "id": "63"
-	},
-	{
-		"text": "Brandon Sanderson", "emoji": "⚔️", "value": "sanderson_fantasia_epica",
-		"relation": "fantasia_epica", "img": "", "id": "64"
-	},
-	{
-		"text": "Series Cortas (1-2 temporadas)", "emoji": "⏱️",
-		"value": "drama_series_corta", "relation": "drama", "img": "", "id": "65"
-	},
-	{
-		"text": "Series Largas (3+ temporadas)", "emoji": "📺",
-		"value": "drama_series_larga", "relation": "drama", "img": "", "id": "66"
-	},
-	{
-		"text": "Miniseries (episodios limitados)", "emoji": "🎬",
-		"value": "drama_miniserie", "relation": "drama", "img": "", "id": "67"
-	},
-	{
-		"text": "Con Bryan Cranston", "emoji": "🧪", "value": "bryan_cranston_drama_series_larga",
-		"relation": "drama_series_larga", "img": "", "id": "68"
-	},
-	{
-		"text": "Con Claire Foy", "emoji": "👑", "value": "claire_foy_drama_series_larga",
-		"relation": "drama_series_larga", "img": "", "id": "69"
-	},
-	{
-		"text": "Con Kevin Spacey", "emoji": "🏛️", "value": "kevin_spacey_drama_series_larga",
-		"relation": "drama_series_larga", "img": "", "id": "70"
-	},
-	{
-		"text": "Comedia de Oficina", "emoji": "💼", "value": "comedia_oficina",
-		"relation": "comedia", "img": "", "id": "71"
-	},
-	{
-		"text": "Comedia Situacional", "emoji": "🏠",
-		"value": "comedia_situacional", "relation": "comedia", "img": "", "id": "72"
-	},
-	{
-		"text": "Comedia Absurda", "emoji": "🤪", "value": "comedia_absurda",
-		"relation": "comedia", "img": "", "id": "73"
-	},
-	{
-		"text": "Con Steve Carell", "emoji": "📎", "value": "steve_carell_comedia_oficina",
-		"relation": "comedia_oficina", "img": "", "id": "74"
-	},
-	{
-		"text": "Con Ricky Gervais", "emoji": "😏", "value": "ricky_gervais_comedia_oficina",
-		"relation": "comedia_oficina", "img": "", "id": "75"
-	},
-	{
-		"text": "Con Amy Poehler", "emoji": "🏛️", "value": "amy_poehler_comedia_oficina",
-		"relation": "comedia_oficina", "img": "", "id": "76"
-	},
-	{
-		"text": "Naturaleza", "emoji": "🌍", "value": "doc_naturaleza",
-		"relation": "documental", "img": "", "id": "77"
-	},
-	{
-		"text": "Crimen Real", "emoji": "🔍", "value": "doc_crimen",
-		"relation": "documental", "img": "", "id": "78"
-	},
-	{
-		"text": "Historia", "emoji": "🏛️", "value": "doc_historia",
-		"relation": "documental", "img": "", "id": "79"
-	},
-	{
-		"text": "Ciencia", "emoji": "🔬", "value": "doc_ciencia",
-		"relation": "documental", "img": "", "id": "80"
-	},
-	{
-		"text": "Narrado por David Attenborough", "emoji": "🎙️", "value": "attenborough_doc_naturaleza",
-		"relation": "doc_naturaleza", "img": "", "id": "81"
-	},
-	{
-		"text": "Narrado por Morgan Freeman", "emoji": "🌟", "value": "freeman_doc_naturaleza",
-		"relation": "doc_naturaleza", "img": "", "id": "82"
-	},
-	{
-		"text": "Documental National Geographic", "emoji": "📸", "value": "natgeo_doc_naturaleza",
-		"relation": "doc_naturaleza", "img": "", "id": "83"
-	}
-];
-;
+    { "text": "Movies", "emoji": "🎬", "value": "movie", "relation": "root", "img": "" },
 
-const relationOptions = ["Series", "Peliculas", "Anime", "Música", "Juegos", "Libros"];
+    { "text": "Action", "emoji": "💥", "value": "action", "relation": "movie", "img": "" },
+    { "text": "Comedy", "emoji": "😂", "value": "comedy", "relation": "movie", "img": "" },
+    { "text": "Drama", "emoji": "🎭", "value": "drama", "relation": "movie", "img": "" },
+    { "text": "Sci-Fi", "emoji": "🚀", "value": "scifi", "relation": "movie", "img": "" },
+    { "text": "Horror", "emoji": "👻", "value": "horror", "relation": "movie", "img": "" },
+    { "text": "Romance", "emoji": "💕", "value": "romance", "relation": "movie", "img": "" },
+
+    { "text": "Military", "emoji": "🪖", "value": "military", "relation": "action", "img": "" },
+    { "text": "Police", "emoji": "🚔", "value": "police", "relation": "action", "img": "" },
+    { "text": "Superhero", "emoji": "🦸", "value": "superhero", "relation": "action", "img": "" },
+    { "text": "Adventure", "emoji": "🗺️", "value": "adventure", "relation": "action", "img": "" },
+
+    { "text": "Romantic", "emoji": "💘", "value": "romantic", "relation": "comedy", "img": "" },
+    { "text": "Family", "emoji": "👨‍👩‍👧‍👦", "value": "family", "relation": "comedy", "img": "" },
+    { "text": "Dark", "emoji": "🌑", "value": "dark", "relation": "comedy", "img": "" },
+    { "text": "Parody", "emoji": "🎭", "value": "parody", "relation": "comedy", "img": "" },
+
+    { "text": "Historical", "emoji": "🏛️", "value": "historical", "relation": "drama", "img": "" },
+    { "text": "Biography", "emoji": "📖", "value": "biography", "relation": "drama", "img": "" },
+    { "text": "Emotional", "emoji": "😢", "value": "emotional", "relation": "drama", "img": "" },
+    { "text": "Social", "emoji": "🌍", "value": "social", "relation": "drama", "img": "" },
+
+    { "text": "Space", "emoji": "🌌", "value": "space", "relation": "scifi", "img": "" },
+    { "text": "Time Travel", "emoji": "⏳", "value": "time_travel", "relation": "scifi", "img": "" },
+    { "text": "AI", "emoji": "🤖", "value": "ai", "relation": "scifi", "img": "" },
+    { "text": "Dystopia", "emoji": "🏙️", "value": "dystopia", "relation": "scifi", "img": "" },
+
+    { "text": "Supernatural", "emoji": "👻", "value": "supernatural", "relation": "horror", "img": "" },
+    { "text": "Slasher", "emoji": "🔪", "value": "slasher", "relation": "horror", "img": "" },
+    { "text": "Psychological", "emoji": "🧠", "value": "psychological", "relation": "horror", "img": "" },
+    { "text": "Monster", "emoji": "👹", "value": "monster", "relation": "horror", "img": "" },
+
+    { "text": "Classic", "emoji": "🎞️", "value": "classic_romance", "relation": "romance", "img": "" },
+    { "text": "Teen", "emoji": "🧑‍🤝‍🧑", "value": "teen", "relation": "romance", "img": "" },
+    { "text": "Drama", "emoji": "🎭", "value": "romance_drama", "relation": "romance", "img": "" },
+    { "text": "Comedy", "emoji": "😂", "value": "romance_comedy", "relation": "romance", "img": "" },
+
+    { "text": "Fast", "emoji": "⚡", "value": "fast", "relation": "military", "img": "" },
+    { "text": "Intense", "emoji": "🔥", "value": "intense", "relation": "military", "img": "" },
+
+    { "text": "Light", "emoji": "☀️", "value": "light", "relation": "romantic", "img": "" },
+    { "text": "Absurd", "emoji": "🤪", "value": "absurd", "relation": "parody", "img": "" },
+
+    { "text": "Slow", "emoji": "🐢", "value": "slow", "relation": "emotional", "img": "" },
+    { "text": "Realistic", "emoji": "🎥", "value": "realistic", "relation": "social", "img": "" },
+
+    { "text": "Deep", "emoji": "🧠", "value": "deep", "relation": "time_travel", "img": "" },
+    { "text": "Visual", "emoji": "🎨", "value": "visual", "relation": "space", "img": "" },
+
+    { "text": "Dark", "emoji": "🌑", "value": "dark_horror", "relation": "psychological", "img": "" },
+    { "text": "Tension", "emoji": "😨", "value": "tension", "relation": "slasher", "img": "" },
+
+    { "text": "Sad", "emoji": "💔", "value": "sad", "relation": "romance_drama", "img": "" },
+    { "text": "Happy", "emoji": "😊", "value": "happy", "relation": "romance_comedy", "img": "" },
+
+    { "text": "Classic", "emoji": "🎞️", "value": "classic", "relation": "fast", "img": "" },
+    { "text": "Modern", "emoji": "🆕", "value": "modern", "relation": "fast", "img": "" },
+
+    { "text": "Popular", "emoji": "🔥", "value": "popular", "relation": "light", "img": "" },
+    { "text": "Cult", "emoji": "🎬", "value": "cult", "relation": "absurd", "img": "" },
+
+    { "text": "Oscar", "emoji": "🏆", "value": "oscar", "relation": "slow", "img": "" },
+    { "text": "True Story", "emoji": "📜", "value": "true_story", "relation": "realistic", "img": "" },
+
+    { "text": "Nolan Style", "emoji": "🧠", "value": "nolan", "relation": "deep", "img": "" },
+    { "text": "Blockbuster", "emoji": "💥", "value": "blockbuster", "relation": "visual", "img": "" },
+
+    { "text": "Extreme", "emoji": "☠️", "value": "extreme", "relation": "dark_horror", "img": "" },
+    { "text": "Classic Horror", "emoji": "👻", "value": "classic_horror", "relation": "tension", "img": "" },
+
+    { "text": "Classic Love", "emoji": "💞", "value": "classic_love", "relation": "sad", "img": "" },
+    { "text": "Modern Love", "emoji": "❤️", "value": "modern_love", "relation": "happy", "img": "" },
+
+    // SERIES,
+
+    { "text": "Series", "emoji": "📺", "value": "series", "relation": "root", "img": "" },
+
+    { "text": "Drama", "emoji": "🎭", "value": "series_drama", "relation": "series", "img": "" },
+    { "text": "Comedy", "emoji": "😂", "value": "series_comedy", "relation": "series", "img": "" },
+    { "text": "Crime", "emoji": "🕵️", "value": "series_crime", "relation": "series", "img": "" },
+    { "text": "Sci-Fi", "emoji": "🚀", "value": "series_scifi", "relation": "series", "img": "" },
+    { "text": "Fantasy", "emoji": "🧙", "value": "series_fantasy", "relation": "series", "img": "" },
+    { "text": "Documentary", "emoji": "🎥", "value": "series_documentary", "relation": "series", "img": "" },
+
+    { "text": "Historical", "emoji": "🏛️", "value": "series_historical", "relation": "series_drama", "img": "" },
+    { "text": "Psychological", "emoji": "🧠", "value": "series_psychological", "relation": "series_drama", "img": "" },
+    { "text": "Family", "emoji": "👨‍👩‍👧‍👦", "value": "series_family", "relation": "series_drama", "img": "" },
+    { "text": "Political", "emoji": "🏛️", "value": "series_political", "relation": "series_drama", "img": "" },
+
+    { "text": "Sitcom", "emoji": "🏠", "value": "series_sitcom", "relation": "series_comedy", "img": "" },
+    { "text": "Workplace", "emoji": "💼", "value": "series_workplace", "relation": "series_comedy", "img": "" },
+    { "text": "Romantic", "emoji": "💕", "value": "series_romantic", "relation": "series_comedy", "img": "" },
+    { "text": "Dark", "emoji": "🌑", "value": "series_dark_comedy", "relation": "series_comedy", "img": "" },
+
+    { "text": "Detective", "emoji": "🔍", "value": "series_detective", "relation": "series_crime", "img": "" },
+    { "text": "Mafia", "emoji": "💼", "value": "series_mafia", "relation": "series_crime", "img": "" },
+    { "text": "Thriller", "emoji": "⚠️", "value": "series_thriller", "relation": "series_crime", "img": "" },
+    { "text": "True Crime", "emoji": "📂", "value": "series_true_crime", "relation": "series_crime", "img": "" },
+
+    { "text": "Space", "emoji": "🌌", "value": "series_space", "relation": "series_scifi", "img": "" },
+    { "text": "Time Travel", "emoji": "⏳", "value": "series_time_travel", "relation": "series_scifi", "img": "" },
+    { "text": "AI", "emoji": "🤖", "value": "series_ai", "relation": "series_scifi", "img": "" },
+    { "text": "Dystopia", "emoji": "🏙️", "value": "series_dystopia", "relation": "series_scifi", "img": "" },
+
+    { "text": "Epic", "emoji": "⚔️", "value": "series_epic", "relation": "series_fantasy", "img": "" },
+    { "text": "Magic", "emoji": "✨", "value": "series_magic", "relation": "series_fantasy", "img": "" },
+    { "text": "Dark", "emoji": "🌑", "value": "series_dark_fantasy", "relation": "series_fantasy", "img": "" },
+    { "text": "Adventure", "emoji": "🗺️", "value": "series_adventure", "relation": "series_fantasy", "img": "" },
+
+    { "text": "Nature", "emoji": "🌍", "value": "series_nature", "relation": "series_documentary", "img": "" },
+    { "text": "History", "emoji": "📜", "value": "series_history", "relation": "series_documentary", "img": "" },
+    { "text": "Science", "emoji": "🔬", "value": "series_science", "relation": "series_documentary", "img": "" },
+    { "text": "Crime", "emoji": "🚨", "value": "series_doc_crime", "relation": "series_documentary", "img": "" },
+
+    { "text": "Slow", "emoji": "🐢", "value": "series_slow", "relation": "series_historical", "img": "" },
+    { "text": "Intense", "emoji": "🔥", "value": "series_intense", "relation": "series_psychological", "img": "" },
+    { "text": "Warm", "emoji": "☀️", "value": "series_warm", "relation": "series_family", "img": "" },
+    { "text": "Smart", "emoji": "🧩", "value": "series_smart", "relation": "series_political", "img": "" },
+
+    { "text": "Easy", "emoji": "😊", "value": "series_easy", "relation": "series_sitcom", "img": "" },
+    { "text": "Popular", "emoji": "🔥", "value": "series_popular", "relation": "series_workplace", "img": "" },
+    { "text": "Sweet", "emoji": "💗", "value": "series_sweet", "relation": "series_romantic", "img": "" },
+    { "text": "Absurd", "emoji": "🤪", "value": "series_absurd", "relation": "series_dark_comedy", "img": "" },
+
+    { "text": "Classic", "emoji": "🕰️", "value": "series_classic", "relation": "series_detective", "img": "" },
+    { "text": "Violent", "emoji": "💣", "value": "series_violent", "relation": "series_mafia", "img": "" },
+    { "text": "Dark", "emoji": "🌑", "value": "series_dark", "relation": "series_thriller", "img": "" },
+    { "text": "Real", "emoji": "📌", "value": "series_real", "relation": "series_true_crime", "img": "" },
+
+    { "text": "Deep", "emoji": "🧠", "value": "series_deep", "relation": "series_space", "img": "" },
+    { "text": "Complex", "emoji": "🧩", "value": "series_complex", "relation": "series_time_travel", "img": "" },
+    { "text": "Cold", "emoji": "🧊", "value": "series_cold", "relation": "series_ai", "img": "" },
+    { "text": "Oppressive", "emoji": "🏢", "value": "series_oppressive", "relation": "series_dystopia", "img": "" },
+
+    { "text": "Long", "emoji": "📚", "value": "series_long", "relation": "series_epic", "img": "" },
+    { "text": "Mystical", "emoji": "🔮", "value": "series_mystical", "relation": "series_magic", "img": "" },
+    { "text": "Violence", "emoji": "🩸", "value": "series_fantasy_violence", "relation": "series_dark_fantasy", "img": "" },
+    { "text": "Fun", "emoji": "🎉", "value": "series_fun", "relation": "series_adventure", "img": "" },
+
+    { "text": "Relaxing", "emoji": "🍃", "value": "series_relaxing", "relation": "series_nature", "img": "" },
+    { "text": "Educational", "emoji": "📘", "value": "series_educational", "relation": "series_history", "img": "" },
+    { "text": "Mindblowing", "emoji": "🤯", "value": "series_mindblowing", "relation": "series_science", "img": "" },
+    { "text": "Investigative", "emoji": "🗂️", "value": "series_investigative", "relation": "series_doc_crime", "img": "" },
+
+    { "text": "Awarded", "emoji": "🏆", "value": "series_awarded", "relation": "series_slow", "img": "" },
+    { "text": "Prestige", "emoji": "👑", "value": "series_prestige", "relation": "series_intense", "img": "" },
+    { "text": "Comfort", "emoji": "🫶", "value": "series_comfort", "relation": "series_warm", "img": "" },
+    { "text": "Politics", "emoji": "🎩", "value": "series_politics", "relation": "series_smart", "img": "" },
+
+    { "text": "Classic Sitcom", "emoji": "📺", "value": "series_classic_sitcom", "relation": "series_easy", "img": "" },
+    { "text": "Office Hit", "emoji": "🏢", "value": "series_office_hit", "relation": "series_popular", "img": "" },
+    { "text": "Modern Love", "emoji": "❤️", "value": "series_modern_love", "relation": "series_sweet", "img": "" },
+    { "text": "Cult Comedy", "emoji": "🎭", "value": "series_cult_comedy", "relation": "series_absurd", "img": "" },
+
+    { "text": "British Style", "emoji": "🇬🇧", "value": "series_british", "relation": "series_classic", "img": "" },
+    { "text": "Antihero", "emoji": "🕶️", "value": "series_antihero", "relation": "series_violent", "img": "" },
+    { "text": "Noir", "emoji": "🌃", "value": "series_noir", "relation": "series_dark", "img": "" },
+    { "text": "Shocking", "emoji": "⚡", "value": "series_shocking", "relation": "series_real", "img": "" },
+
+    { "text": "Space Epic", "emoji": "🪐", "value": "series_space_epic", "relation": "series_deep", "img": "" },
+    { "text": "Mind-Bending", "emoji": "🌀", "value": "series_mind_bending", "relation": "series_complex", "img": "" },
+    { "text": "Human vs Machine", "emoji": "⚙️", "value": "series_human_machine", "relation": "series_cold", "img": "" },
+    { "text": "Rebellion", "emoji": "✊", "value": "series_rebellion", "relation": "series_oppressive", "img": "" },
+
+    { "text": "Legendary", "emoji": "🐉", "value": "series_legendary", "relation": "series_long", "img": "" },
+    { "text": "Ancient Magic", "emoji": "📜", "value": "series_ancient_magic", "relation": "series_mystical", "img": "" },
+    { "text": "Brutal", "emoji": "⚔️", "value": "series_brutal", "relation": "series_fantasy_violence", "img": "" },
+    { "text": "Hero Journey", "emoji": "🧭", "value": "series_hero_journey", "relation": "series_fun", "img": "" },
+
+    { "text": "BBC Style", "emoji": "🎙️", "value": "series_bbc", "relation": "series_relaxing", "img": "" },
+    { "text": "World History", "emoji": "🌐", "value": "series_world_history", "relation": "series_educational", "img": "" },
+    { "text": "Big Ideas", "emoji": "💡", "value": "series_big_ideas", "relation": "series_mindblowing", "img": "" },
+    { "text": "Case Files", "emoji": "📁", "value": "series_case_files", "relation": "series_investigative", "img": "" },
+
+    //BOOKs,
+
+    { "text": "Books", "emoji": "📚", "value": "book", "relation": "root", "img": "" },
+
+    { "text": "Fantasy", "emoji": "🧙‍♂️", "value": "fantasy", "relation": "book", "img": "" },
+    { "text": "Sci-Fi", "emoji": "🚀", "value": "book_scifi", "relation": "book", "img": "" },
+    { "text": "Romance", "emoji": "💕", "value": "book_romance", "relation": "book", "img": "" },
+    { "text": "Mystery", "emoji": "🔍", "value": "book_mystery", "relation": "book", "img": "" },
+    { "text": "Horror", "emoji": "👻", "value": "book_horror", "relation": "book", "img": "" },
+
+    { "text": "Short (<300 pages)", "emoji": "📖", "value": "fantasy_short", "relation": "fantasy", "img": "" },
+    { "text": "Medium (300-500)", "emoji": "📘", "value": "fantasy_medium", "relation": "fantasy", "img": "" },
+    { "text": "Epic (500+)", "emoji": "📜", "value": "fantasy_epic", "relation": "fantasy", "img": "" },
+
+    { "text": "Tolkien Style", "emoji": "🧙", "value": "tolkien", "relation": "fantasy_epic", "img": "" },
+    { "text": "Dark Fantasy", "emoji": "🌑", "value": "dark_fantasy", "relation": "fantasy_epic", "img": "" },
+    { "text": "Magic World", "emoji": "✨", "value": "magic_world", "relation": "fantasy_medium", "img": "" },
+
+    { "text": "Space", "emoji": "🌌", "value": "space", "relation": "book_scifi", "img": "" },
+    { "text": "AI / Robots", "emoji": "🤖", "value": "ai", "relation": "book_scifi", "img": "" },
+    { "text": "Time Travel", "emoji": "⏳", "value": "time_travel", "relation": "book_scifi", "img": "" },
+
+    //MUSIC,
+
+    { "text": "Music", "emoji": "🎵", "value": "music", "relation": "root", "img": "" },
+
+    { "text": "Pop", "emoji": "🎤", "value": "pop", "relation": "music", "img": "" },
+    { "text": "Rock", "emoji": "🎸", "value": "rock", "relation": "music", "img": "" },
+    { "text": "Hip-Hop", "emoji": "🎧", "value": "hiphop", "relation": "music", "img": "" },
+    { "text": "Electronic", "emoji": "🎹", "value": "electronic", "relation": "music", "img": "" },
+    { "text": "Chill", "emoji": "🌙", "value": "chill", "relation": "music", "img": "" },
+
+    { "text": "Happy Mood", "emoji": "😄", "value": "pop_happy", "relation": "pop", "img": "" },
+    { "text": "Love Songs", "emoji": "❤️", "value": "pop_love", "relation": "pop", "img": "" },
+    { "text": "Dance Hits", "emoji": "🕺", "value": "pop_dance", "relation": "pop", "img": "" },
+
+    { "text": "Classic Rock", "emoji": "🔥", "value": "rock_classic", "relation": "rock", "img": "" },
+    { "text": "Alternative", "emoji": "🌿", "value": "rock_alt", "relation": "rock", "img": "" },
+    { "text": "Heavy", "emoji": "⚡", "value": "rock_heavy", "relation": "rock", "img": "" },
+
+    { "text": "Trap", "emoji": "💰", "value": "trap", "relation": "hiphop", "img": "" },
+    { "text": "Old School", "emoji": "📼", "value": "old_school", "relation": "hiphop", "img": "" },
+    { "text": "Freestyle", "emoji": "🎙️", "value": "freestyle", "relation": "hiphop", "img": "" },
+
+    { "text": "House", "emoji": "🏠", "value": "house", "relation": "electronic", "img": "" },
+    { "text": "Techno", "emoji": "🔊", "value": "techno", "relation": "electronic", "img": "" },
+    { "text": "Ambient", "emoji": "🌫️", "value": "ambient", "relation": "electronic", "img": "" },
+
+    { "text": "Lo-fi", "emoji": "☕", "value": "lofi", "relation": "chill", "img": "" },
+    { "text": "Sleep", "emoji": "😴", "value": "sleep", "relation": "chill", "img": "" },
+    { "text": "Focus", "emoji": "🧠", "value": "focus", "relation": "chill", "img": "" },
+
+];
+
+
+const relationOptions = ["Series", "Movies",  "Music", "Books"];
 
 type ViewMode = "grid" | "table";
 type SortField = "none" | "text" | "value";

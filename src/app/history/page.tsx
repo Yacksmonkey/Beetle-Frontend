@@ -91,8 +91,8 @@ export default function HistoryPage() {
 
             const data: HistoryResponse = await res.json();
             setItems(data.items);
-        } catch (e: any) {
-            setError(e?.message ?? "Error loading history");
+        } catch (e) {
+            setError(e instanceof Error ? e.message : "Error loading history");
         } finally {
             setLoading(false);
         }
@@ -111,8 +111,8 @@ export default function HistoryPage() {
             }
 
             setItems((prev) => prev.filter((x) => x.historyId !== historyId));
-        } catch (e: any) {
-            alert(e?.message ?? "Could not delete");
+        } catch (e) {
+            alert(e instanceof Error ? e.message : "Could not delete");
         }
     }
 
@@ -133,8 +133,8 @@ export default function HistoryPage() {
                 ...prev,
                 [historyId]: data.liked,
             }));
-        } catch (e: any) {
-            alert(e?.message ?? "Could not toggle like");
+        } catch (e) {
+            alert(e instanceof Error ? e.message : "Could not toggle like");
         }
     }
 
@@ -154,8 +154,8 @@ export default function HistoryPage() {
 
             const data: CommentItem[] = await res.json();
             setCommentsByHistoryId((prev) => ({ ...prev, [historyId]: data }));
-        } catch (e: any) {
-            alert(e?.message ?? "Could not load comments");
+        } catch (e) {
+            alert(e instanceof Error ? e.message : "Could not load comments");
         } finally {
             setLoadingComments((prev) => ({ ...prev, [historyId]: false }));
         }
@@ -214,8 +214,8 @@ export default function HistoryPage() {
                 ...prev,
                 [historyId]: true,
             }));
-        } catch (e: any) {
-            alert(e?.message ?? "Could not add comment");
+        } catch (e) {
+            alert(e instanceof Error ? e.message : "Could not add comment");
         }
     }
 
@@ -233,8 +233,8 @@ export default function HistoryPage() {
             }
 
             await loadComments(historyId);
-        } catch (e: any) {
-            alert(e?.message ?? "Could not delete comment");
+        } catch (e) {
+            alert(e instanceof Error ? e.message : "Could not delete comment");
         }
     }
 

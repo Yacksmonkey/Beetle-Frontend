@@ -1,9 +1,15 @@
-export async function getMe() {
-    const res = await fetch('http://localhost:8080/api/auth/me', {
-        method: 'GET',
-        credentials: 'include',
-    })
+import { API_BASE } from "@/app/env";
 
-    if (!res.ok) return null
-    return res.json()
+export async function getMe() {
+    try {
+        const res = await fetch(`${API_BASE}/api/auth/me`, {
+            method: 'GET',
+            credentials: 'include',
+        })
+
+        if (!res.ok) return null
+        return res.json()
+    } catch {
+        return null
+    }
 }

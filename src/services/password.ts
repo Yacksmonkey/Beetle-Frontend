@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080"
+import { API_BASE } from "@/app/env"
 
 export async function requestPasswordReset(email: string) {
     const res = await fetch(`${API_BASE}/api/password/request-reset`, {

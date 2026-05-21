@@ -14,6 +14,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { API_BASE } from "@/app/env"
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState("")
@@ -43,7 +44,7 @@ export default function ForgotPasswordPage() {
         setResultMsg(null)
 
         try {
-            const res = await fetch("http://localhost:8080/api/password/request-reset", {
+            const res = await fetch(`${API_BASE}/api/password/request-reset`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),

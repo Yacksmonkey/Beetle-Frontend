@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight } from "lucide-react"
@@ -30,10 +29,7 @@ type FeedResponse = {
 }
 
 export default function Home() {
-    const { theme } = useTheme()
-    const [mounted, setMounted] = useState(false)
-
-    const [me, setMe] = useState<any>(null)
+    const [me, setMe] = useState<unknown>(null)
     const [authChecked, setAuthChecked] = useState(false)
 
     const [feedItems, setFeedItems] = useState<FeedItem[]>([])
@@ -43,11 +39,9 @@ export default function Home() {
     const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080"
 
     useEffect(() => {
-        setMounted(true)
         checkAuth()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-    const isDark = mounted && theme === "dark"
 
     async function checkAuth() {
         const user = await getMe()
@@ -77,8 +71,8 @@ export default function Home() {
 
             const data: FeedResponse = await res.json()
             setFeedItems(data.items || [])
-        } catch (e: any) {
-            setFeedError(e?.message ?? "Could not load feed")
+        } catch (e) {
+            setFeedError(e instanceof Error ? e.message : "Could not load feed")
             setFeedItems([])
         } finally {
             setFeedLoading(false)
@@ -88,7 +82,7 @@ export default function Home() {
     return (
         <div className="min-h-screen">
             <div className="relative h-screen w-full mt-5">
-                <div className="absolute inset-0 flex items-center justify-center md:justify-start pointer-events-none">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="text-center space-y-6 px-4 pointer-events-auto">
                         <div className="inline-block">
                             <h1 className="text-6xl md:text-8xl font-bold">
@@ -118,7 +112,7 @@ export default function Home() {
             </div>
 
             <div className="bg-background">
-                {authChecked && me && (
+                {authChecked && !!me && (
                     <section className="py-16 px-4 border-y border-border">
                         <div className="max-w-5xl mx-auto space-y-6">
                             <div className="flex items-center justify-between">
@@ -163,6 +157,7 @@ export default function Home() {
                                             <CardContent className="pt-6 space-y-4">
                                                 <div className="flex items-start justify-between gap-4">
                                                     <div className="flex items-center gap-3">
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                                         <img
                                                             src={item.picture || "/bettle insect.jpg"}
                                                             alt={item.username}

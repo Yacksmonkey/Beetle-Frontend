@@ -39,7 +39,7 @@ export async function POST (request: NextRequest) {
         })
 
         return response
-    }catch (error) {
+    }catch {
         return NextResponse.json(
             { message: 'Server error'},
             { status: 500}

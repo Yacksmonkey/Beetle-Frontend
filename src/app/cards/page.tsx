@@ -74,8 +74,8 @@ export default function Page() {
             }
 
             setCurrentCards(data);
-        } catch (e: any) {
-            setError(e?.message ?? "Could not load cards");
+        } catch (e) {
+            setError(e instanceof Error ? e.message : "Could not load cards");
             setCurrentCards([]);
         } finally {
             setLoading(false);
@@ -102,8 +102,8 @@ export default function Page() {
 
             const data: RecommendationItem[] = await res.json();
             setRecommendations(data);
-        } catch (e: any) {
-            setError(e?.message ?? "Could not load recommendations");
+        } catch (e) {
+            setError(e instanceof Error ? e.message : "Could not load recommendations");
             setRecommendations([]);
         } finally {
             setLoadingRecs(false);
@@ -145,13 +145,14 @@ export default function Page() {
             }
 
             setRecommendations((prev) => prev.filter((r) => r.id !== recommendationId));
-        } catch (e: any) {
-            alert(e?.message ?? "Could not save recommendation");
+        } catch (e) {
+            alert(e instanceof Error ? e.message : "Could not save recommendation");
         }
     }
 
     useEffect(() => {
         loadCards(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function handleSelect(card: PreferenceCard) {
@@ -344,7 +345,7 @@ function Card({
     const scale = 1 - (totalCards - 1 - index) * 0.05;
     const yOffset = (totalCards - 1 - index) * 10;
 
-    const handleDragEnd = async (_: any, info: PanInfo) => {
+    const handleDragEnd = async (_: unknown, info: PanInfo) => {
         if (Math.abs(info.offset.x) > 80) {
             const direction = info.offset.x > 0 ? 1 : -1;
 

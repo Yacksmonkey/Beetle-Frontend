@@ -36,7 +36,7 @@ interface CardItem {
 	img: string | null;
 }
 
-const initialCards: CardItem[] = [
+const initialCardsData = [
     { "text": "Movies", "emoji": "🎬", "value": "movie", "relation": "root", "img": "" },
 
     { "text": "Action", "emoji": "💥", "value": "action", "relation": "movie", "img": "" },
@@ -264,8 +264,12 @@ const initialCards: CardItem[] = [
     { "text": "Lo-fi", "emoji": "☕", "value": "lofi", "relation": "chill", "img": "" },
     { "text": "Sleep", "emoji": "😴", "value": "sleep", "relation": "chill", "img": "" },
     { "text": "Focus", "emoji": "🧠", "value": "focus", "relation": "chill", "img": "" },
-
 ];
+
+const initialCards: CardItem[] = initialCardsData.map((item, index) => ({
+    ...item,
+    id: `initial-${index}`,
+}));
 
 
 const relationOptions = ["Series", "Movies",  "Music", "Books"];

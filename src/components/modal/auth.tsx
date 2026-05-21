@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import { getMe } from "@/services/auth"
 import { useRouter } from "next/navigation"
 import { GoogleLogin } from "@react-oauth/google"
+import { API_BASE } from "@/app/env"
 
 interface AuthModalProps {
     authModalOpen: boolean
@@ -76,7 +77,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
 
             setIsSubmitting(true)
             try {
-                const res = await fetch("http://localhost:8080/api/auth/register", {
+                const res = await fetch(`${API_BASE}/api/auth/register`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ name, email, password }),
@@ -119,7 +120,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
 
         setIsSubmitting(true)
         try {
-            const res = await fetch("http://localhost:8080/api/auth/login", {
+            const res = await fetch(`${API_BASE}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -235,7 +236,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
                                 setNoticeType(null)
 
                                 try {
-                                    const res = await fetch("http://localhost:8080/api/auth/google", {
+                                    const res = await fetch(`${API_BASE}/api/auth/google`, {
                                         method: "POST",
                                         headers: { "Content-Type": "application/json" },
                                         credentials: "include",

@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getMe } from "@/services/auth"
+import {API_BASE} from "@/app/env";
 
 type FriendItem = {
     friendUserId: number
@@ -22,8 +23,19 @@ type FriendItem = {
     picture: string | null
 }
 
+type UserProfile = {
+    name?: string
+    username?: string
+    email?: string
+    picture?: string
+    phone?: string
+    address?: string
+    bio?: string
+    publicProfile?: boolean
+}
+
 export default function ProfilePage() {
-    const [me, setMe] = useState<any>(null)
+    const [me, setMe] = useState<UserProfile | null>(null)
     const [loading, setLoading] = useState(true)
     const [editOpen, setEditOpen] = useState(false)
 
@@ -39,7 +51,6 @@ export default function ProfilePage() {
     const [isUploading, setIsUploading] = useState(false)
     const [uploadMsg, setUploadMsg] = useState<string | null>(null)
 
-    const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080"
 
     const [friends, setFriends] = useState<FriendItem[]>([])
     const [friendsLoading, setFriendsLoading] = useState(true)
@@ -90,7 +101,7 @@ export default function ProfilePage() {
     }
 
     const saveProfile = async () => {
-        const res = await fetch("http://localhost:8080/api/auth/me", {
+        const res = await fetch(`${API_BASE}/api/auth/me`, {
             method: "PUT",
             credentials: "include",
             headers: {
@@ -129,7 +140,7 @@ export default function ProfilePage() {
             const formData = new FormData()
             formData.append("file", selectedFile)
 
-            const res = await fetch("http://localhost:8080/api/uploads/profile-picture", {
+            const res = await fetch(`${API_BASE}/api/uploads/profile-picture`, {
                 method: "POST",
                 credentials: "include",
                 body: formData,
@@ -161,6 +172,7 @@ export default function ProfilePage() {
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="lg:w-1/3 space-y-6">
                         <div className="relative w-full h-[320px] rounded-lg overflow-hidden bg-muted">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={me.picture || "/bettle insect.jpg"}
                                 alt="Profile"
@@ -222,6 +234,7 @@ export default function ProfilePage() {
                                                         key={friend.friendUserId}
                                                         className="flex items-center gap-3"
                                                     >
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                                         <img
                                                             src={friend.picture || "/bettle insect.jpg"}
                                                             alt={friend.username}

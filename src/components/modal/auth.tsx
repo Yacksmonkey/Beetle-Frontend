@@ -120,7 +120,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
 
         setIsSubmitting(true)
         try {
-            const res = await fetch(`${API_BASE}/api/auth/login`, {
+            const res = await fetch(`/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -236,7 +236,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
                                 setNoticeType(null)
 
                                 try {
-                                    const res = await fetch(`${API_BASE}/api/auth/google`, {
+                                    const res = await fetch(`/api/auth/google`, {
                                         method: "POST",
                                         headers: { "Content-Type": "application/json" },
                                         credentials: "include",

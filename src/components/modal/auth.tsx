@@ -11,17 +11,18 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getMe } from "@/services/auth"
+import { login as authLogin, register as authRegister } from "@/services/auth"
 import { useRouter } from "next/navigation"
 import { GoogleLogin } from "@react-oauth/google"
-import { API_BASE } from "@/app/env"
+import { BeetleLogo } from "@/components/core/beetle-logo"
 
 interface AuthModalProps {
     authModalOpen: boolean
     setAuthModalOpen: (open: boolean) => void
+    onAuthSuccess?: () => void
 }
 
-export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModalProps) {
+export default function AuthModal({ authModalOpen, setAuthModalOpen, onAuthSuccess }: AuthModalProps) {
     const router = useRouter()
 
     const [isLogin, setIsLogin] = useState(true)
@@ -66,9 +67,6 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
         setNotice(null)
         setNoticeType(null)
 
-        // ------------------------
-        // SIGN UP
-        // ------------------------
         if (!isLogin) {
             if (!name.trim()) return setError("Name is required.")
             if (!email.trim()) return setError("Email is required.")
@@ -77,24 +75,12 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
 
             setIsSubmitting(true)
             try {
-                const res = await fetch(`${API_BASE}/api/auth/register`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ name, email, password }),
-                })
+                const data = await authRegister(name, email, password)
 
-
-                const contentType = res.headers.get("content-type") ?? ""
-                const data = contentType.includes("application/json")
-                    ? await res.json().catch(() => null)
-                    : await res.text().catch(() => "")
-
-                if (!res.ok) {
-                    const msg =
-                        typeof data === "string"
-                            ? data
-                            : data?.message || "Registration failed."
-                    setError(msg || "Registration failed.")
+                if (data?.userId) {
+                    onAuthSuccess?.()
+                    setAuthModalOpen(false)
+                    router.push("/profile")
                     return
                 }
 
@@ -104,41 +90,25 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
                 setConfirmPassword("")
 
                 return
-            } catch {
-                setError("Network error. Is the backend running?")
+            } catch (err) {
+                setError(err instanceof Error ? err.message : "Registration failed.")
                 return
             } finally {
                 setIsSubmitting(false)
             }
         }
 
-        // ------------------------
-        // LOGIN NORMAL
-        // ------------------------
         if (!email.trim()) return setError("Email is required.")
         if (!password.trim()) return setError("Password is required.")
 
         setIsSubmitting(true)
         try {
-            const res = await fetch(`/api/auth/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({ email, password }),
-            })
-
-            if (!res.ok) {
-
-                const text = await res.text().catch(() => "")
-                setError(text || "Login failed.")
-                return
-            }
-
-            await getMe()
+            await authLogin(email, password)
+            onAuthSuccess?.()
             setAuthModalOpen(false)
             router.push("/profile")
-        } catch {
-            setError("Network error. Is the backend running?")
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Login failed.")
         } finally {
             setIsSubmitting(false)
         }
@@ -148,34 +118,22 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
         <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
             <DialogContent className="sm:max-w-[400px]">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">
-                        {isLogin ? "Welcome back" : "Create an account"}
-                    </DialogTitle>
+                    <div className="flex items-center gap-3 mb-1">
+                        <BeetleLogo className="size-7 text-primary" />
+                        <DialogTitle className="text-2xl font-bold tracking-tight">
+                            {isLogin ? "Welcome back" : "Create an account"}
+                        </DialogTitle>
+                    </div>
                     <DialogDescription>
                         {isLogin
-                            ? "Welcome back! Please enter your details."
-                            : "Sign up to get started with your account."}
+                            ? "Enter your details to sign in."
+                            : "Sign up to get started."}
                     </DialogDescription>
                 </DialogHeader>
 
-                {isLogin && (
-                    <div className="flex justify-end">
-                        <button
-                            type="button"
-                            className="text-sm hover:underline"
-                            onClick={() => {
-                                setAuthModalOpen(false)
-                                router.push("/forgot-password")
-                            }}
-                        >
-                            Forgot password?
-                        </button>
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     {!isLogin && (
-                        <div>
+                        <div className="space-y-1.5">
                             <Label>Name</Label>
                             <Input
                                 value={name}
@@ -185,7 +143,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
                         </div>
                     )}
 
-                    <div>
+                    <div className="space-y-1.5">
                         <Label>Email</Label>
                         <Input
                             type="email"
@@ -195,8 +153,22 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
                         />
                     </div>
 
-                    <div>
-                        <Label>Password</Label>
+                    <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                            <Label>Password</Label>
+                            {isLogin && (
+                                <button
+                                    type="button"
+                                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                                    onClick={() => {
+                                        setAuthModalOpen(false)
+                                        router.push("/forgot-password")
+                                    }}
+                                >
+                                    Forgot?
+                                </button>
+                            )}
+                        </div>
                         <Input
                             type="password"
                             value={password}
@@ -206,7 +178,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
                     </div>
 
                     {!isLogin && (
-                        <div>
+                        <div className="space-y-1.5">
                             <Label>Confirm Password</Label>
                             <Input
                                 type="password"
@@ -218,61 +190,63 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen }: AuthModal
                     )}
 
                     {notice && (
-                        <p className={`text-sm ${noticeType === "success" ? "text-green-600" : "text-red-500"}`}>
+                        <p className={`text-sm ${noticeType === "success" ? "text-primary" : "text-destructive"}`}>
                             {notice}
                         </p>
                     )}
 
                     <Button type="submit" className="w-full" disabled={isSubmitting}>
                         {isSubmitting
-                            ? (isLogin ? "Logging in..." : "Creating account...")
-                            : (isLogin ? "Login" : "Create account")}
+                            ? (isLogin ? "Signing in..." : "Creating account...")
+                            : (isLogin ? "Sign in" : "Create account")}
                     </Button>
 
                     {isLogin && (
-                        <GoogleLogin
-                            onSuccess={async (credentialResponse) => {
-                                setNotice(null)
-                                setNoticeType(null)
+                        <div className="flex justify-center">
+                            <GoogleLogin
+                                onSuccess={async (credentialResponse) => {
+                                    setNotice(null)
+                                    setNoticeType(null)
 
-                                try {
-                                    const res = await fetch(`/api/auth/google`, {
-                                        method: "POST",
-                                        headers: { "Content-Type": "application/json" },
-                                        credentials: "include",
-                                        body: JSON.stringify({
-                                            googleToken: credentialResponse.credential,
-                                        }),
-                                    })
+                                    try {
+                                        const res = await fetch(`/api/auth/google`, {
+                                            method: "POST",
+                                            headers: { "Content-Type": "application/json" },
+                                            credentials: "include",
+                                            body: JSON.stringify({
+                                                googleToken: credentialResponse.credential,
+                                            }),
+                                        })
 
-                                    if (!res.ok) {
-                                        const text = await res.text().catch(() => "")
-                                        setError(text || "Google login failed.")
-                                        return
+                                        if (!res.ok) {
+                                            const text = await res.text().catch(() => "")
+                                            setError(text || "Google login failed.")
+                                            return
+                                        }
+
+                                        onAuthSuccess?.()
+                                        setAuthModalOpen(false)
+                                        router.push("/profile")
+                                    } catch {
+                                        setError("Network error. Is the backend running?")
                                     }
-
-                                    await getMe()
-                                    setAuthModalOpen(false)
-                                    router.push("/profile")
-                                } catch {
-                                    setError("Network error. Is the backend running?")
-                                }
-                            }}
-                            onError={() => {
-                                setError("Google login error.")
-                            }}
-                        />
+                                }}
+                                onError={() => {
+                                    setError("Google login error.")
+                                }}
+                            />
+                        </div>
                     )}
 
-                    <p className="text-center text-sm">
+                    <p className="text-center text-sm text-muted-foreground">
                         {isLogin ? "Don't have an account? " : "Already have an account? "}
                         <button
                             type="button"
-                            className="hover:underline"
+                            className="text-foreground font-medium hover:underline"
                             onClick={toggleMode}
                             disabled={isSubmitting}
                         >
-                            {isLogin ? "Sign up" : "Log in"}
+                            {isLogin ? "Sign up" : "Sign in"}
                         </button>
                     </p>
                 </form>

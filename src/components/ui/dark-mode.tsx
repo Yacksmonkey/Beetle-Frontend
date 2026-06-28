@@ -8,31 +8,29 @@ export const DarkMode = () => {
 	const {setTheme, theme} = useTheme()
 	const [mounted, setMounted] = useState(false)
 
-	// Espera a que el componente se monte en el cliente
 	useEffect(() => {
 		setMounted(true)
 	}, [])
 
-	// Mientras no esté montado, renderiza un placeholder consistente
 	if (!mounted) {
 		return (
 			<Button variant="ghost" size="icon" disabled>
-				<Sun className="h-5 w-5"/>
+				<Sun className="h-[18px] w-[18px]"/>
 			</Button>
 		)
 	}
 
-	// Una vez montado, renderiza basado en el tema real
 	return (
 		<Button
 			variant="ghost"
 			size="icon"
 			onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+			className="text-muted-foreground hover:text-foreground"
 		>
 			{theme === "dark" ? (
-				<Sun className="h-5 w-5"/>
+				<Sun className="h-[18px] w-[18px]"/>
 			) : (
-				<Moon className="h-5 w-5"/>
+				<Moon className="h-[18px] w-[18px]"/>
 			)}
 		</Button>
 	)

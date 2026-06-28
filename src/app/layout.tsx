@@ -1,4 +1,3 @@
-// app/layout.tsx
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
@@ -18,8 +17,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-    title: "Bettle",
-    description: "Bettle app",
+    title: "Beetle — Discover your perfect journey",
+    description: "Build your perfect plan by selecting cards. Your journey starts here.",
 }
 
 export default function RootLayout({
@@ -31,7 +30,6 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 
-
         <GoogleOAuthProvider clientId={"911683984183-dvd6d20059jceqmooeqrh7u08l1ob76r.apps.googleusercontent.com"}>
 
             <ThemeProvider
@@ -41,7 +39,9 @@ export default function RootLayout({
                 disableTransitionOnChange
             >
                 <Navbar />
-                {children}
+                <main className="min-h-screen">
+                    {children}
+                </main>
                 <Footer />
             </ThemeProvider>
 

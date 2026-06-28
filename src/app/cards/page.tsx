@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react";
 import { motion, PanInfo, useAnimation, useMotionValue, useTransform } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/core/navbar";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
+import { api } from "@/services/api";
+import { Button } from "@/components/ui/button";
 const FINAL_LEVEL = 4;
 
 type PreferenceCard = {
@@ -56,17 +55,7 @@ export default function Page() {
                 params.set("parentKey", parentKey);
             }
 
-            const res = await fetch(`${API_BASE}/api/preferences/cards?${params.toString()}`, {
-                method: "GET",
-                credentials: "include",
-            });
-
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(text || `Failed: ${res.status}`);
-            }
-
-            const data: PreferenceCard[] = await res.json();
+            const data = await api.get<PreferenceCard[]>(`/api/preferences/cards?${params.toString()}`)
 
             if (data.length === 0) {
                 await finishFlow(fallbackPath ?? selectedPath);
@@ -90,17 +79,7 @@ export default function Page() {
             const params = new URLSearchParams();
             params.set("cardKey", cardKey);
 
-            const res = await fetch(`${API_BASE}/api/recommendations/final?${params.toString()}`, {
-                method: "GET",
-                credentials: "include",
-            });
-
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(text || `Failed: ${res.status}`);
-            }
-
-            const data: RecommendationItem[] = await res.json();
+            const data = await api.get<RecommendationItem[]>(`/api/recommendations/final?${params.toString()}`)
             setRecommendations(data);
         } catch (e) {
             setError(e instanceof Error ? e.message : "Could not load recommendations");
@@ -127,23 +106,7 @@ export default function Page() {
 
     async function saveToHistory(recommendationId: number, status: "SAVED" | "DISMISSED") {
         try {
-            const res = await fetch(`${API_BASE}/api/history`, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    recommendationId,
-                    status,
-                }),
-            });
-
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(text || `Failed: ${res.status}`);
-            }
-
+            await api.post("/api/history", { recommendationId, status });
             setRecommendations((prev) => prev.filter((r) => r.id !== recommendationId));
         } catch (e) {
             alert(e instanceof Error ? e.message : "Could not save recommendation");
@@ -177,13 +140,11 @@ export default function Page() {
             return;
         }
 
-        // Reiniciar mazo en nivel 1
         if (currentLevel === 1) {
             await loadCards(1);
             return;
         }
 
-        // Reiniciar mazo en nivel 2 usando la selección del nivel 1
         if (currentLevel === 2) {
             const parentKeyLevel1 = selectedPath[0];
 
@@ -196,7 +157,6 @@ export default function Page() {
             return;
         }
 
-        // Desde nivel 3 en adelante: mantener flujo actual
         await finishFlow(selectedPath);
     }
 
@@ -210,33 +170,34 @@ export default function Page() {
     }
 
     return (
-        <main className="min-h-screen bg-gradient-to-br from-secondary via-card to-background flex items-center justify-center p-4 overflow-hidden">
-            <Navbar />
-
-            <div className="w-full max-w-md flex flex-col items-center gap-4">
-                <div className="text-center space-y-1">
-                    <h1 className="text-white text-2xl font-bold">Choose your preferences</h1>
-
-                    <p className="text-gray-400 text-sm">
+        <main className="min-h-screen bg-background flex items-center justify-center p-4">
+            <div className="w-full max-w-lg flex flex-col items-center gap-6">
+                <div className="text-center space-y-1.5">
+                    <h1 className="text-2xl font-bold tracking-tight">Choose your preferences</h1>
+                    <p className="text-muted-foreground text-sm">
                         {finishedPath ? "Recommendations ready" : `Level ${currentLevel} of ${FINAL_LEVEL}`}
                     </p>
-
                     {selectedPath.length > 0 && !finishedPath && (
-                        <p className="text-xs text-gray-500 break-all">
+                        <p className="text-xs text-muted-foreground/60 break-all">
                             Path: {selectedPath.join(" > ")}
                         </p>
                     )}
                 </div>
 
-                <div className="relative w-80 h-[500px]">
+                <div className="relative w-80 h-[520px]">
                     {loading && (
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-white text-xl font-semibold">Loading...</div>
+                            <div className="text-lg font-semibold text-muted-foreground">Loading...</div>
                         </div>
                     )}
 
-                    {!loading &&
-                        !finishedPath &&
+                    {!loading && !finishedPath && error && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <p className="text-sm text-destructive">{error}</p>
+                        </div>
+                    )}
+
+                    {!loading && !finishedPath && !error &&
                         currentCards.map((card, index) => (
                             <Card
                                 key={card.id}
@@ -249,75 +210,47 @@ export default function Page() {
                         ))}
 
                     {finishedPath && (
-                        <div className="absolute inset-0 overflow-y-auto rounded-2xl bg-card border p-4 flex flex-col gap-4">
-                            <h2 className="text-white text-2xl font-bold text-center">Your recommendations</h2>
-
-                            <p className="text-xs text-gray-500 break-all text-center">
+                        <div className="absolute inset-0 overflow-y-auto rounded-2xl bg-card border p-6 flex flex-col gap-4">
+                            <h2 className="text-xl font-bold text-center">Your recommendations</h2>
+                            <p className="text-xs text-muted-foreground break-all text-center">
                                 Path: {finishedPath}
                             </p>
 
                             {loadingRecs && (
-                                <div className="text-white text-center">Loading recommendations...</div>
+                                <div className="text-center text-sm text-muted-foreground">Loading recommendations...</div>
                             )}
 
                             {!loadingRecs && recommendations.length === 0 && (
-                                <div className="text-center text-gray-400 text-sm">
+                                <div className="text-center text-sm text-muted-foreground">
                                     No recommendations found for this path yet.
                                 </div>
                             )}
 
                             {!loadingRecs &&
                                 recommendations.map((rec) => (
-                                    <div key={rec.id} className="rounded-xl border p-4 bg-zinc-900/60">
-                                        <h3 className="text-lg font-bold text-white">{rec.title}</h3>
-                                        <p className="text-xs text-gray-400 mt-1">{rec.type}</p>
-                                        <p className="text-sm text-gray-300 mt-2">{rec.description}</p>
-
-                                        <div className="flex gap-2 mt-4">
-                                            <button
-                                                className="bg-primary hover:bg-primary/90 text-primary-foreground px-3 py-2 rounded text-sm"
-                                                onClick={() => saveToHistory(rec.id, "SAVED")}
-                                            >
-                                                Save
-                                            </button>
-
-                                            <button
-                                                className="bg-muted text-white hover:bg-muted/80 px-3 py-2 rounded text-sm"
-                                                onClick={() => saveToHistory(rec.id, "DISMISSED")}
-                                            >
-                                                Dismiss
-                                            </button>
+                                    <div key={rec.id} className="rounded-xl border p-4 space-y-3">
+                                        <h3 className="text-lg font-semibold">{rec.title}</h3>
+                                        <p className="text-xs text-muted-foreground">{rec.type}</p>
+                                        <p className="text-sm text-muted-foreground">{rec.description}</p>
+                                        <div className="flex gap-2">
+                                            <Button size="sm" onClick={() => saveToHistory(rec.id, "SAVED")}>Save</Button>
+                                            <Button size="sm" variant="outline" onClick={() => saveToHistory(rec.id, "DISMISSED")}>Dismiss</Button>
                                         </div>
                                     </div>
                                 ))}
 
                             <div className="flex gap-2 mt-2">
-                                <button
-                                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded font-medium"
-                                    onClick={resetFlow}
-                                >
-                                    Reset
-                                </button>
-
-                                <button
-                                    className="flex-1 bg-muted text-white hover:bg-muted/80 px-4 py-2 rounded font-medium"
-                                    onClick={() => router.push("/")}
-                                >
-                                    Finish
-                                </button>
+                                <Button className="flex-1" onClick={resetFlow}>Reset</Button>
+                                <Button variant="outline" className="flex-1" onClick={() => router.push("/history")}>Finish</Button>
                             </div>
                         </div>
                     )}
                 </div>
 
-                <div className="text-xs text-gray-500 text-center">
-                    Swipe right to choose • Swipe left to skip
-                </div>
-
-                {error && (
-                    <div className="text-red-400 text-sm text-center max-w-sm">
-                        {error}
-                    </div>
+                {!finishedPath && !loading && !error && (
+                    <p className="text-xs text-muted-foreground text-center">
+                        Swipe right to choose &bull; Swipe left to skip
+                    </p>
                 )}
             </div>
         </main>
@@ -374,9 +307,9 @@ function Card({
             drag={isTop ? "x" : false}
             onDragEnd={handleDragEnd}
         >
-            <div className="w-full h-full rounded-2xl border bg-card flex flex-col items-center justify-center">
+            <div className="w-full h-full rounded-2xl border-2 bg-card shadow-lg flex flex-col items-center justify-center gap-3">
                 <div className="text-6xl">{card.emoji ?? "🎴"}</div>
-                <div className="text-white text-2xl font-bold mt-2">{card.label}</div>
+                <div className="text-xl font-semibold">{card.label}</div>
             </div>
         </motion.div>
     );

@@ -1,119 +1,173 @@
-import React from "react";
-import {Facebook, Instagram, Linkedin, Twitter} from "lucide-react";
+"use client"
 
-const sections = [
-	{
-		title: "Product",
-		links: [
-			{name: "Overview", href: "#"},
-			{name: "Pricing", href: "#"},
-			{name: "Marketplace", href: "#"},
-			{name: "Features", href: "#"},
-		],
-	},
-	{
-		title: "Company",
-		links: [
-			{name: "About", href: "#"},
-			{name: "Team", href: "#"},
-			{name: "Blog", href: "#"},
-			{name: "Careers", href: "#"},
-		],
-	},
-	{
-		title: "Resources",
-		links: [
-			{name: "Help", href: "#"},
-			{name: "Sales", href: "#"},
-			{name: "Advertise", href: "#"},
-			{name: "Privacy", href: "#"},
-		],
-	},
-];
+import React, { useState } from "react";
+import { Github, Twitter, Heart, Sparkles, Users, MessageCircle } from "lucide-react";
+import { BeetleLogo } from "@/components/core/beetle-logo";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 
-const socialLinks = [
-	{icon: <Instagram className="size-5"/>, href: "#", label: "Instagram"},
-	{icon: <Facebook className="size-5"/>, href: "#", label: "Facebook"},
-	{icon: <Twitter className="size-5"/>, href: "#", label: "Twitter"},
-	{icon: <Linkedin className="size-5"/>, href: "#", label: "LinkedIn"},
-];
-
-const legalLinks = [
-	{name: "Terms and Conditions", href: "#"},
-	{name: "Privacy Policy", href: "#"},
-];
-
-const logo = {
-	url: "https://www.shadcnblocks.com",
-	src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
-	alt: "logo",
-	title: "Bettle.com",
+const footerLinks = {
+    product: [
+        { name: "Cards", href: "/cards" },
+        { name: "History", href: "/history" },
+        { name: "Recommendations", href: "#" },
+    ],
+    resources: [
+        { name: "Help Center", href: "#" },
+        { name: "GitHub", href: "#" },
+        { name: "Contact", href: "#" },
+    ],
+    legal: [
+        { name: "Privacy", href: "#" },
+        { name: "Terms", href: "#" },
+    ],
 };
 
+function AboutModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                        <BeetleLogo className="size-8 text-primary" />
+                        <DialogTitle className="text-2xl">About Beetle</DialogTitle>
+                    </div>
+                    <DialogDescription className="text-base">
+                        Discover recommendations that truly match your taste.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <div className="grid gap-4">
+                    <div className="flex gap-3 p-4 rounded-xl bg-accent/50">
+                        <Sparkles className="size-5 text-primary shrink-0 mt-0.5" />
+                        <div>
+                            <h4 className="font-medium text-sm">Recommendation Cards</h4>
+                            <p className="text-sm text-muted-foreground mt-0.5">
+                                Swipe through beautifully designed cards to tell us what you love. Each choice refines your profile.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 p-4 rounded-xl bg-accent/50">
+                        <Heart className="size-5 text-primary shrink-0 mt-0.5" />
+                        <div>
+                            <h4 className="font-medium text-sm">Personalized Discovery</h4>
+                            <p className="text-sm text-muted-foreground mt-0.5">
+                                Your preferences shape unique recommendations across movies, series, music, and books.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 p-4 rounded-xl bg-accent/50">
+                        <Users className="size-5 text-primary shrink-0 mt-0.5" />
+                        <div>
+                            <h4 className="font-medium text-sm">Friend Interactions</h4>
+                            <p className="text-sm text-muted-foreground mt-0.5">
+                                Connect with friends, share what you discover, and see their activity on your feed.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 p-4 rounded-xl bg-accent/50">
+                        <MessageCircle className="size-5 text-primary shrink-0 mt-0.5" />
+                        <div>
+                            <h4 className="font-medium text-sm">Why Beetle</h4>
+                            <p className="text-sm text-muted-foreground mt-0.5">
+                                Built to help you find your next favorite thing — without endless scrolling.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 export default function Footer() {
-	return (
-		<section
-			className="flex justify-center w-full py-24 bg-background/80 backdrop-blur-md border-t border-border/80 text-center">
-			<div className="container w-full">
-				<div className="flex w-full flex-col items-center justify-between gap-10 lg:flex-row lg:text-center">
-					<div className="flex w-full flex-col items-center justify-between gap-6">
-						{/* Logo */}
-						<div className="flex items-center justify-center gap-2">
-							<a href={logo.url}>
-								{/* eslint-disable-next-line @next/next/no-img-element */}
-								<img
-									src={logo.src}
-									alt={logo.alt}
-									title={logo.title}
-									className="h-8"
-								/>
-							</a>
-							<h2 className="text-xl font-semibold text-primary">{logo.title}</h2>
-						</div>
-						<p className="text-muted-foreground max-w-[70%] text-sm mx-auto">
-							A collection of components for your startup business or side project.
-						</p>
-						<ul className="text-muted-foreground flex items-center justify-center space-x-6">
-							{socialLinks.map((social, idx) => (
-								<li key={idx} className="hover:text-primary font-medium">
-									<a href={social.href} aria-label={social.label}>
-										{social.icon}
-									</a>
-								</li>
-							))}
-						</ul>
-					</div>
-					<div className="grid w-full gap-6 md:grid-cols-3 lg:gap-20">
-						{sections.map((section, sectionIdx) => (
-							<div key={sectionIdx} className="flex flex-col items-center">
-								<h3 className="mb-4 font-bold">{section.title}</h3>
-								<ul className="text-muted-foreground space-y-3 text-sm">
-									{section.links.map((link, linkIdx) => (
-										<li
-											key={linkIdx}
-											className="hover:text-primary font-medium"
-										>
-											<a href={link.href}>{link.name}</a>
-										</li>
-									))}
-								</ul>
-							</div>
-						))}
-					</div>
-				</div>
-				<div
-					className="text-muted-foreground mt-8 flex flex-col items-center justify-center gap-4 border-t py-8 text-xs font-medium md:flex-row md:justify-between md:text-center">
-					<p className="order-2 md:order-1">© 2024 Shadcnblocks.com. All rights reserved.</p>
-					<ul className="order-1 flex flex-col items-center justify-center gap-2 md:order-2 md:flex-row">
-						{legalLinks.map((link, idx) => (
-							<li key={idx} className="hover:text-primary">
-								<a href={link.href}> {link.name}</a>
-							</li>
-						))}
-					</ul>
-				</div>
-			</div>
-		</section>
-	);
+    const [aboutOpen, setAboutOpen] = useState(false);
+
+    return (
+        <>
+            <footer className="border-t border-border bg-background">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+                        <div className="col-span-2 md:col-span-2">
+                            <div className="flex items-center gap-2.5 mb-4">
+                                <BeetleLogo className="size-6 text-primary" />
+                                <span className="text-lg font-semibold tracking-tight">Beetle</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+                                Discover your perfect journey through personalized recommendations powered by your choices.
+                            </p>
+                            <div className="flex items-center gap-3 mt-5">
+                                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Twitter">
+                                    <Twitter className="size-4" />
+                                </a>
+                                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub">
+                                    <Github className="size-4" />
+                                </a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 className="text-sm font-semibold mb-4">Product</h4>
+                            <ul className="space-y-3">
+                                {footerLinks.product.map((link) => (
+                                    <li key={link.name}>
+                                        <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                                            {link.name}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="text-sm font-semibold mb-4">Resources</h4>
+                            <ul className="space-y-3">
+                                {footerLinks.resources.map((link) => (
+                                    <li key={link.name}>
+                                        <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                                            {link.name}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="text-sm font-semibold mb-4">Company</h4>
+                            <ul className="space-y-3">
+                                <li>
+                                    <button
+                                        onClick={() => setAboutOpen(true)}
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
+                                    >
+                                        About Beetle
+                                    </button>
+                                </li>
+                                {footerLinks.legal.map((link) => (
+                                    <li key={link.name}>
+                                        <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                                            {link.name}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <p className="text-xs text-muted-foreground">
+                            &copy; {new Date().getFullYear()} Beetle. All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+
+            <AboutModal open={aboutOpen} onOpenChange={setAboutOpen} />
+        </>
+    );
 }

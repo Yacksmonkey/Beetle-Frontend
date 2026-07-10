@@ -1,8 +1,11 @@
 "use client"
 
 import React, { useState } from "react";
-import { Github, Twitter, Heart, Sparkles, Users, MessageCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Sparkles, Heart, Users } from "lucide-react";
 import { BeetleLogo } from "@/components/core/beetle-logo";
+import { useAuth } from "@/hooks/useAuth";
+import AuthModal from "@/components/modal/auth";
 import {
     Dialog,
     DialogContent,
@@ -10,23 +13,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-
-const footerLinks = {
-    product: [
-        { name: "Cards", href: "/cards" },
-        { name: "History", href: "/history" },
-        { name: "Recommendations", href: "#" },
-    ],
-    resources: [
-        { name: "Help Center", href: "#" },
-        { name: "GitHub", href: "#" },
-        { name: "Contact", href: "#" },
-    ],
-    legal: [
-        { name: "Privacy", href: "#" },
-        { name: "Terms", href: "#" },
-    ],
-};
 
 function AboutModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
     return (
@@ -38,44 +24,34 @@ function AboutModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: b
                         <DialogTitle className="text-2xl">About Beetle</DialogTitle>
                     </div>
                     <DialogDescription className="text-base">
-                        Discover recommendations that truly match your taste.
+                        Beetle helps you discover movies, series, books and music.
                     </DialogDescription>
                 </DialogHeader>
-
-                <div className="grid gap-4">
+                <div className="grid gap-3">
                     <div className="flex gap-3 p-4 rounded-xl bg-accent/50">
                         <Sparkles className="size-5 text-primary shrink-0 mt-0.5" />
                         <div>
-                            <h4 className="font-medium text-sm">Recommendation Cards</h4>
+                            <h4 className="font-medium text-sm">Choose &amp; Discover</h4>
                             <p className="text-sm text-muted-foreground mt-0.5">
-                                Swipe through beautifully designed cards to tell us what you love. Each choice refines your profile.
+                                You choose preference cards and Beetle recommends movies, series, books and music.
                             </p>
                         </div>
                     </div>
                     <div className="flex gap-3 p-4 rounded-xl bg-accent/50">
                         <Heart className="size-5 text-primary shrink-0 mt-0.5" />
                         <div>
-                            <h4 className="font-medium text-sm">Personalized Discovery</h4>
+                            <h4 className="font-medium text-sm">Save Favorites</h4>
                             <p className="text-sm text-muted-foreground mt-0.5">
-                                Your preferences shape unique recommendations across movies, series, music, and books.
+                                Save the recommendations you love to your personal collection.
                             </p>
                         </div>
                     </div>
                     <div className="flex gap-3 p-4 rounded-xl bg-accent/50">
                         <Users className="size-5 text-primary shrink-0 mt-0.5" />
                         <div>
-                            <h4 className="font-medium text-sm">Friend Interactions</h4>
+                            <h4 className="font-medium text-sm">Connect with Friends</h4>
                             <p className="text-sm text-muted-foreground mt-0.5">
-                                Connect with friends, share what you discover, and see their activity on your feed.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex gap-3 p-4 rounded-xl bg-accent/50">
-                        <MessageCircle className="size-5 text-primary shrink-0 mt-0.5" />
-                        <div>
-                            <h4 className="font-medium text-sm">Why Beetle</h4>
-                            <p className="text-sm text-muted-foreground mt-0.5">
-                                Built to help you find your next favorite thing — without endless scrolling.
+                                Connect with friends and see their activity on your feed.
                             </p>
                         </div>
                     </div>
@@ -85,8 +61,74 @@ function AboutModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: b
     );
 }
 
+function PrivacyModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl">Privacy</DialogTitle>
+                    <DialogDescription className="text-base">
+                        How Beetle handles your data.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 text-sm text-muted-foreground">
+                    <p>
+                        Beetle is a personal portfolio/demo project. Profile data is used only for app functionality.
+                    </p>
+                    <p>
+                        Authentication uses the existing secure auth flow.
+                    </p>
+                    <p>
+                        No selling user data. Users can update their profile information at any time.
+                    </p>
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
+function TermsModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl">Terms</DialogTitle>
+                    <DialogDescription className="text-base">
+                        Terms of use for Beetle.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 text-sm text-muted-foreground">
+                    <p>
+                        Beetle is a demo/portfolio project. Recommendations are for entertainment and discovery purposes.
+                    </p>
+                    <p>
+                        Users are responsible for their interactions.
+                    </p>
+                    <p>
+                        Availability may vary because free hosting is used.
+                    </p>
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
 export default function Footer() {
+    const router = useRouter();
+    const { isAuthenticated, refreshUser, loading } = useAuth();
     const [aboutOpen, setAboutOpen] = useState(false);
+    const [privacyOpen, setPrivacyOpen] = useState(false);
+    const [termsOpen, setTermsOpen] = useState(false);
+    const [authModalOpen, setAuthModalOpen] = useState(false);
+
+    const requireAuth = (path: string) => {
+        if (loading) return;
+        if (isAuthenticated) {
+            router.push(path);
+        } else {
+            setAuthModalOpen(true);
+        }
+    };
 
     return (
         <>
@@ -99,41 +141,76 @@ export default function Footer() {
                                 <span className="text-lg font-semibold tracking-tight">Beetle</span>
                             </div>
                             <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-                                Discover your perfect journey through personalized recommendations powered by your choices.
+                                Discover your perfect journey through personalized recommendations.
                             </p>
-                            <div className="flex items-center gap-3 mt-5">
-                                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Twitter">
-                                    <Twitter className="size-4" />
-                                </a>
-                                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub">
-                                    <Github className="size-4" />
-                                </a>
-                            </div>
+                            <p className="text-xs text-muted-foreground mt-4">
+                                Built by Everson Landaeta &middot; Open Source Portfolio
+                            </p>
                         </div>
 
                         <div>
                             <h4 className="text-sm font-semibold mb-4">Product</h4>
                             <ul className="space-y-3">
-                                {footerLinks.product.map((link) => (
-                                    <li key={link.name}>
-                                        <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                                            {link.name}
-                                        </a>
-                                    </li>
-                                ))}
+                                <li>
+                                    <button
+                                        onClick={() => router.push("/")}
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
+                                    >
+                                        Home
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={() => requireAuth("/cards")}
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
+                                    >
+                                        Cards
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={() => requireAuth("/history")}
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
+                                    >
+                                        History
+                                    </button>
+                                </li>
                             </ul>
                         </div>
 
                         <div>
                             <h4 className="text-sm font-semibold mb-4">Resources</h4>
                             <ul className="space-y-3">
-                                {footerLinks.resources.map((link) => (
-                                    <li key={link.name}>
-                                        <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                                            {link.name}
-                                        </a>
-                                    </li>
-                                ))}
+                                <li>
+                                    <a
+                                        href="https://github.com/Yacksmonkey"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                                    >
+                                        GitHub
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.instagram.com/yacksmonkey?igsh=MW1jbnZrMGFoazA4Yw==&utm_source=qr"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                                    >
+                                        Instagram
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://x.com/yacksmonkey?s=11"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                                    >
+                                        X
+                                    </a>
+                                </li>
                             </ul>
                         </div>
 
@@ -148,13 +225,22 @@ export default function Footer() {
                                         About Beetle
                                     </button>
                                 </li>
-                                {footerLinks.legal.map((link) => (
-                                    <li key={link.name}>
-                                        <a href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                                            {link.name}
-                                        </a>
-                                    </li>
-                                ))}
+                                <li>
+                                    <button
+                                        onClick={() => setPrivacyOpen(true)}
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
+                                    >
+                                        Privacy
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={() => setTermsOpen(true)}
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
+                                    >
+                                        Terms
+                                    </button>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -168,6 +254,16 @@ export default function Footer() {
             </footer>
 
             <AboutModal open={aboutOpen} onOpenChange={setAboutOpen} />
+            <PrivacyModal open={privacyOpen} onOpenChange={setPrivacyOpen} />
+            <TermsModal open={termsOpen} onOpenChange={setTermsOpen} />
+            <AuthModal
+                authModalOpen={authModalOpen}
+                setAuthModalOpen={setAuthModalOpen}
+                onAuthSuccess={() => {
+                    setAuthModalOpen(false);
+                    refreshUser();
+                }}
+            />
         </>
     );
 }

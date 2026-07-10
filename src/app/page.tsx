@@ -95,7 +95,7 @@ export default function Home() {
                             <div className="flex flex-col sm:flex-row gap-3">
                                 <Button
                                     size="xl"
-                                    onClick={() => me ? router.push("/cards") : setAuthModalOpen(true)}
+                                    onClick={() => { if (!authChecked) return; if (me) router.push("/cards"); else setAuthModalOpen(true); }}
                                 >
                                     Start Journey
                                     <ArrowRight className="ml-1.5 size-5" />
@@ -103,7 +103,7 @@ export default function Home() {
                                 <Button
                                     size="xl"
                                     variant="outline"
-                                    onClick={() => me ? router.push("/history") : setAuthModalOpen(true)}
+                                    onClick={() => { if (!authChecked) return; if (me) router.push("/history"); else setAuthModalOpen(true); }}
                                 >
                                     Explore Cards
                                 </Button>
@@ -126,8 +126,11 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="border-y border-border bg-accent/30">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <section className="border-y border-border bg-accent/30 relative overflow-hidden">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="w-[800px] h-[800px] rounded-full bg-primary/5 dark:bg-primary/10 blur-3xl" />
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
                     <div className="grid md:grid-cols-3 gap-6">
                         <div className="bg-card border border-border rounded-xl p-8 space-y-4">
                             <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -159,6 +162,53 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+            {/* PUBLIC ABOUT — only for unauthenticated users */}
+            {authChecked && !me && (
+                <section className="relative overflow-hidden py-20">
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="w-[600px] h-[600px] rounded-full bg-primary/5 dark:bg-primary/[0.07] blur-3xl" />
+                    </div>
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div className="text-center mb-12 space-y-3">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                                <BeetleLogo className="size-4" />
+                                About Beetle
+                            </div>
+                            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+                                Your personal discovery engine
+                            </h2>
+                            <p className="text-muted-foreground max-w-lg mx-auto">
+                                Five simple steps to find what you&apos;ll love next.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                            {[
+                                { num: "01", title: "Choose Cards", desc: "Pick what you like from simple preference cards" },
+                                { num: "02", title: "Get Recommendations", desc: "Beetle finds movies, series, books and music for you" },
+                                { num: "03", title: "Save to History", desc: "Keep the best ones in your personal collection" },
+                                { num: "04", title: "Connect with Friends", desc: "See what friends are discovering and sharing" },
+                                { num: "05", title: "Build Your Profile", desc: "Your taste profile grows with every choice" },
+                            ].map((step, i) => (
+                                <div
+                                    key={i}
+                                    className="relative bg-card border border-border rounded-xl p-5 space-y-2 text-center group hover:border-primary/20 transition-colors"
+                                >
+                                    {i < 4 && (
+                                        <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-px bg-border z-10" />
+                                    )}
+                                    <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto group-hover:bg-primary/20 transition-colors">
+                                        <span className="text-sm font-bold text-primary">{step.num}</span>
+                                    </div>
+                                    <h3 className="font-semibold text-sm">{step.title}</h3>
+                                    <p className="text-xs text-muted-foreground leading-relaxed">{step.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {authChecked && !!me && (
                 <section className="py-20 px-4">

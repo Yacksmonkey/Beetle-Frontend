@@ -47,9 +47,16 @@ export default function Navbar() {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			api.get<{ friendUserId: number }[]>("/api/friends")
-				.then((data) => setFriendIds(new Set(data.map((f) => f.friendUserId))))
-				.catch(() => {})
+			api.get<Record<string, unknown>[]>("/api/friends")
+				.then((data) => {
+					const ids = data
+						.map((f) => f.friendUserId ?? f.id ?? f.userId ?? f.friendId)
+						.filter((id): id is number => typeof id === "number" && !Number.isNaN(id))
+					setFriendIds(new Set(ids))
+				})
+				.catch((err) => {
+					if (process.env.NODE_ENV === "development") console.error("Failed to load friends:", err)
+				})
 		}
 	}, [isAuthenticated])
 

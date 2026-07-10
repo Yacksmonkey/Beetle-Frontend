@@ -185,6 +185,9 @@ export default function Page() {
                 </div>
 
                 <div className="relative w-80 h-[520px]">
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="w-72 h-72 rounded-full bg-primary/5 dark:bg-primary/10 blur-3xl" />
+                    </div>
                     {loading && (
                         <div className="absolute inset-0 flex items-center justify-center">
                             <div className="text-lg font-semibold text-muted-foreground">Loading...</div>
@@ -228,7 +231,7 @@ export default function Page() {
 
                             {!loadingRecs &&
                                 recommendations.map((rec) => (
-                                    <div key={rec.id} className="rounded-xl border p-4 space-y-3">
+                                    <div key={rec.id} className="rounded-xl border p-4 space-y-3 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
                                         <h3 className="text-lg font-semibold">{rec.title}</h3>
                                         <p className="text-xs text-muted-foreground">{rec.type}</p>
                                         <p className="text-sm text-muted-foreground">{rec.description}</p>
@@ -307,7 +310,7 @@ function Card({
             drag={isTop ? "x" : false}
             onDragEnd={handleDragEnd}
         >
-            <div className="w-full h-full rounded-2xl border-2 bg-card shadow-lg flex flex-col items-center justify-center gap-3">
+            <div className={`w-full h-full rounded-2xl border-2 bg-card flex flex-col items-center justify-center gap-3 transition-shadow duration-300 ${isTop ? 'shadow-[0_0_25px_-8px_rgba(102,184,0,0.25)] border-primary/20' : 'shadow-lg'}`}>
                 <div className="text-6xl">{card.emoji ?? "🎴"}</div>
                 <div className="text-xl font-semibold">{card.label}</div>
             </div>

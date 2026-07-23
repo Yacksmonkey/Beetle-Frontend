@@ -15,6 +15,7 @@ import { login as authLogin, register as authRegister } from "@/services/auth"
 import { useRouter } from "next/navigation"
 import { GoogleLogin } from "@react-oauth/google"
 import { BeetleLogo } from "@/components/core/beetle-logo"
+import { BackendWakeOverlay } from "@/components/backend-wake-overlay"
 
 interface AuthModalProps {
     authModalOpen: boolean
@@ -34,6 +35,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen, onAuthSucce
 
     const [notice, setNotice] = useState<string | null>(null)
     const [noticeType, setNoticeType] = useState<"success" | "error" | null>(null)
+    const [authActive, setAuthActive] = useState(false)
 
     const resetFields = () => {
         setName("")
@@ -74,6 +76,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen, onAuthSucce
             if (password !== confirmPassword) return setError("Passwords do not match.")
 
             setIsSubmitting(true)
+            setAuthActive(true)
             try {
                 const data = await authRegister(name, email, password)
 
@@ -94,6 +97,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen, onAuthSucce
                 setError(err instanceof Error ? err.message : "Registration failed.")
                 return
             } finally {
+                setAuthActive(false)
                 setIsSubmitting(false)
             }
         }
@@ -102,6 +106,7 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen, onAuthSucce
         if (!password.trim()) return setError("Password is required.")
 
         setIsSubmitting(true)
+        setAuthActive(true)
         try {
             await authLogin(email, password)
             onAuthSuccess?.()
@@ -110,147 +115,154 @@ export default function AuthModal({ authModalOpen, setAuthModalOpen, onAuthSucce
         } catch (err) {
             setError(err instanceof Error ? err.message : "Login failed.")
         } finally {
+            setAuthActive(false)
             setIsSubmitting(false)
         }
     }
 
     return (
-        <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
-            <DialogContent className="sm:max-w-[400px]">
-                <DialogHeader>
-                    <div className="flex items-center gap-3 mb-1">
-                        <BeetleLogo className="size-7 text-primary" />
-                        <DialogTitle className="text-2xl font-bold tracking-tight">
-                            {isLogin ? "Welcome back" : "Create an account"}
-                        </DialogTitle>
-                    </div>
-                    <DialogDescription>
-                        {isLogin
-                            ? "Enter your details to sign in."
-                            : "Sign up to get started."}
-                    </DialogDescription>
-                </DialogHeader>
+        <>
+            <Dialog open={authModalOpen} onOpenChange={setAuthModalOpen}>
+                <DialogContent className="sm:max-w-[400px]">
+                    <DialogHeader>
+                        <div className="flex items-center gap-3 mb-1">
+                            <BeetleLogo className="size-7 text-primary" />
+                            <DialogTitle className="text-2xl font-bold tracking-tight">
+                                {isLogin ? "Welcome back" : "Create an account"}
+                            </DialogTitle>
+                        </div>
+                        <DialogDescription>
+                            {isLogin
+                                ? "Enter your details to sign in."
+                                : "Sign up to get started."}
+                        </DialogDescription>
+                    </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    {!isLogin && (
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        {!isLogin && (
+                            <div className="space-y-1.5">
+                                <Label>Name</Label>
+                                <Input
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    disabled={isSubmitting}
+                                />
+                            </div>
+                        )}
+
                         <div className="space-y-1.5">
-                            <Label>Name</Label>
+                            <Label>Email</Label>
                             <Input
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 disabled={isSubmitting}
                             />
                         </div>
-                    )}
 
-                    <div className="space-y-1.5">
-                        <Label>Email</Label>
-                        <Input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            disabled={isSubmitting}
-                        />
-                    </div>
-
-                    <div className="space-y-1.5">
-                        <div className="flex items-center justify-between">
-                            <Label>Password</Label>
-                            {isLogin && (
-                                <button
-                                    type="button"
-                                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                                    onClick={() => {
-                                        setAuthModalOpen(false)
-                                        router.push("/forgot-password")
-                                    }}
-                                >
-                                    Forgot?
-                                </button>
-                            )}
-                        </div>
-                        <Input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            disabled={isSubmitting}
-                        />
-                    </div>
-
-                    {!isLogin && (
                         <div className="space-y-1.5">
-                            <Label>Confirm Password</Label>
+                            <div className="flex items-center justify-between">
+                                <Label>Password</Label>
+                                {isLogin && (
+                                    <button
+                                        type="button"
+                                        className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                                        onClick={() => {
+                                            setAuthModalOpen(false)
+                                            router.push("/forgot-password")
+                                        }}
+                                    >
+                                        Forgot?
+                                    </button>
+                                )}
+                            </div>
                             <Input
                                 type="password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 disabled={isSubmitting}
                             />
                         </div>
-                    )}
 
-                    {notice && (
-                        <p className={`text-sm ${noticeType === "success" ? "text-primary" : "text-destructive"}`}>
-                            {notice}
-                        </p>
-                    )}
+                        {!isLogin && (
+                            <div className="space-y-1.5">
+                                <Label>Confirm Password</Label>
+                                <Input
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    disabled={isSubmitting}
+                                />
+                            </div>
+                        )}
 
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
-                        {isSubmitting
-                            ? (isLogin ? "Signing in..." : "Creating account...")
-                            : (isLogin ? "Sign in" : "Create account")}
-                    </Button>
+                        {notice && (
+                            <p className={`text-sm ${noticeType === "success" ? "text-primary" : "text-destructive"}`}>
+                                {notice}
+                            </p>
+                        )}
 
-                    {isLogin && (
-                        <div className="flex justify-center">
-                            <GoogleLogin
-                                onSuccess={async (credentialResponse) => {
-                                    setNotice(null)
-                                    setNoticeType(null)
+                        <Button type="submit" className="w-full" disabled={isSubmitting}>
+                            {isSubmitting
+                                ? (isLogin ? "Signing in..." : "Creating account...")
+                                : (isLogin ? "Sign in" : "Create account")}
+                        </Button>
 
-                                    try {
-                                        const res = await fetch(`/api/auth/google`, {
-                                            method: "POST",
-                                            headers: { "Content-Type": "application/json" },
-                                            credentials: "include",
-                                            body: JSON.stringify({
-                                                googleToken: credentialResponse.credential,
-                                            }),
-                                        })
+                        {isLogin && (
+                            <div className="flex justify-center">
+                                <GoogleLogin
+                                    onSuccess={async (credentialResponse) => {
+                                        setNotice(null)
+                                        setNoticeType(null)
 
-                                        if (!res.ok) {
-                                            const text = await res.text().catch(() => "")
-                                            setError(text || "Google login failed.")
-                                            return
+                                        setAuthActive(true)
+                                        try {
+                                            const res = await fetch(`/api/auth/google`, {
+                                                method: "POST",
+                                                headers: { "Content-Type": "application/json" },
+                                                credentials: "include",
+                                                body: JSON.stringify({
+                                                    googleToken: credentialResponse.credential,
+                                                }),
+                                            })
+
+                                            if (!res.ok) {
+                                                const text = await res.text().catch(() => "")
+                                                setError(text || "Google login failed.")
+                                                return
+                                            }
+
+                                            onAuthSuccess?.()
+                                            setAuthModalOpen(false)
+                                            router.push("/profile")
+                                        } catch {
+                                            setError("Network error. Is the backend running?")
+                                        } finally {
+                                            setAuthActive(false)
                                         }
+                                    }}
+                                    onError={() => {
+                                        setError("Google login error.")
+                                    }}
+                                />
+                            </div>
+                        )}
 
-                                        onAuthSuccess?.()
-                                        setAuthModalOpen(false)
-                                        router.push("/profile")
-                                    } catch {
-                                        setError("Network error. Is the backend running?")
-                                    }
-                                }}
-                                onError={() => {
-                                    setError("Google login error.")
-                                }}
-                            />
-                        </div>
-                    )}
-
-                    <p className="text-center text-sm text-muted-foreground">
-                        {isLogin ? "Don't have an account? " : "Already have an account? "}
-                        <button
-                            type="button"
-                            className="text-foreground font-medium hover:underline"
-                            onClick={toggleMode}
-                            disabled={isSubmitting}
-                        >
-                            {isLogin ? "Sign up" : "Sign in"}
-                        </button>
-                    </p>
-                </form>
-            </DialogContent>
-        </Dialog>
+                        <p className="text-center text-sm text-muted-foreground">
+                            {isLogin ? "Don't have an account? " : "Already have an account? "}
+                            <button
+                                type="button"
+                                className="text-foreground font-medium hover:underline"
+                                onClick={toggleMode}
+                                disabled={isSubmitting}
+                            >
+                                {isLogin ? "Sign up" : "Sign in"}
+                            </button>
+                        </p>
+                    </form>
+                </DialogContent>
+            </Dialog>
+            <BackendWakeOverlay active={authActive} />
+        </>
     )
 }
